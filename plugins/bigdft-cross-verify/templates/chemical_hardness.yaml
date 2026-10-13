@@ -1,0 +1,16 @@
+id: chemical_hardness
+version: 1
+status: draft
+quantity: "chemical hardness from the three-point finite difference"
+definition: "eta = (VIE - VEA)/2 = (E(N-1) - 2 E(N) + E(N+1))/2, all at the N-electron geometry"
+kind: energy_linear
+parameters: {species: {type: structure_ref, required: true}}
+units: eV
+tolerance_class: ionization_affinity
+synonyms: ["chemical hardness", "hardness", "eta"]
+not_equivalent_to: ["HOMO-LUMO gap / 2 (single-particle estimate)"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}, "N-1": {charge_offset: 1, virtual: false}, "N+1": {charge_offset: -1, virtual: false}}
+    combine: {"N-1": 0.5, N: -1.0, "N+1": 0.5}
+    stop_abs: 0.005

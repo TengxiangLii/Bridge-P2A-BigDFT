@@ -1,0 +1,593 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "bigdft-mapping",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/bigdft-mapping/1"
+  },
+  "profile_id": {
+   "type": "string"
+  },
+  "profile_version": {
+   "type": "string"
+  },
+  "version": {
+   "type": "string"
+  },
+  "status": {
+   "enum": [
+    "draft",
+    "reviewed"
+   ]
+  },
+  "settings": {
+   "type": "object",
+   "properties": {
+    "code": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "code_version": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "xc_functional": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "xc_per_element_exceptions": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "basis_or_grid": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "pseudopotentials_or_projectors": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "boundary_conditions": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "spin_treatment": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "charge_states": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "smearing_or_electronic_temperature": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "scf_convergence": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "geometry_relaxation_criterion": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "dispersion_correction": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "solvation": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "k_points": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    },
+    "structure_source": {
+     "type": "object",
+     "properties": {
+      "bigdft_value": {},
+      "status": {
+       "enum": [
+        "exact",
+        "approximated",
+        "not_mappable",
+        "not_applicable",
+        "unknown"
+       ]
+      },
+      "note": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "bigdft_value",
+      "status",
+      "note"
+     ],
+     "additionalProperties": false
+    }
+   },
+   "required": [
+    "code",
+    "code_version",
+    "xc_functional",
+    "xc_per_element_exceptions",
+    "basis_or_grid",
+    "pseudopotentials_or_projectors",
+    "boundary_conditions",
+    "spin_treatment",
+    "charge_states",
+    "smearing_or_electronic_temperature",
+    "scf_convergence",
+    "geometry_relaxation_criterion",
+    "dispersion_correction",
+    "solvation",
+    "k_points",
+    "structure_source"
+   ],
+   "additionalProperties": false
+  },
+  "elements": {
+   "type": "object",
+   "additionalProperties": {
+    "oneOf": [
+     {
+      "type": "object",
+      "properties": {
+       "status": {
+        "enum": [
+         "exact",
+         "approximated"
+        ]
+       },
+       "ixc": {
+        "type": "string"
+       },
+       "psp_file": {
+        "type": "string"
+       },
+       "psp_sha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+       },
+       "psp_source": {
+        "type": "string"
+       },
+       "valence_electrons": {
+        "type": "integer"
+       },
+       "note": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "status",
+       "ixc",
+       "psp_file",
+       "psp_sha256",
+       "psp_source",
+       "valence_electrons",
+       "note"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "status": {
+        "const": "not_mappable"
+       },
+       "note": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "status",
+       "note"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   }
+  },
+  "spin_rule": {
+   "enum": [
+    "odd_electrons_collinear_minimal_moment"
+   ]
+  },
+  "dft_defaults": {
+   "type": "object",
+   "properties": {
+    "rmult": {
+     "type": "array",
+     "items": {
+      "type": "number"
+     },
+     "minItems": 2,
+     "maxItems": 2
+    },
+    "gnrm_cv": {
+     "type": "number"
+    },
+    "itermax": {
+     "type": "integer"
+    },
+    "nrepmax": {
+     "type": "integer"
+    }
+   },
+   "required": [
+    "rmult",
+    "gnrm_cv",
+    "itermax",
+    "nrepmax"
+   ],
+   "additionalProperties": false
+  },
+  "virtual_orbitals": {
+   "type": "object",
+   "properties": {
+    "norbv": {
+     "type": "integer"
+    },
+    "nvirt": {
+     "type": "integer"
+    },
+    "itermax_virt": {
+     "type": "integer"
+    },
+    "gnrm_cv_virt": {
+     "type": "number"
+    }
+   },
+   "required": [
+    "norbv",
+    "nvirt",
+    "itermax_virt",
+    "gnrm_cv_virt"
+   ],
+   "additionalProperties": false
+  },
+  "tolerance_overrides": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "class": {
+      "type": "string"
+     },
+     "value": {
+      "type": "number"
+     },
+     "reason": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "class",
+     "value",
+     "reason"
+    ]
+   }
+  },
+  "reviewers": {
+   "type": "array"
+  }
+ },
+ "required": [
+  "schema",
+  "profile_id",
+  "profile_version",
+  "version",
+  "status",
+  "settings",
+  "elements",
+  "spin_rule",
+  "dft_defaults",
+  "virtual_orbitals",
+  "tolerance_overrides"
+ ],
+ "additionalProperties": false
+}

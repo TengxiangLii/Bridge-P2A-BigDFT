@@ -1,0 +1,98 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "target",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/target/1"
+  },
+  "name": {
+   "type": "string"
+  },
+  "bigdft": {
+   "type": "object",
+   "properties": {
+    "module": {
+     "type": "string"
+    },
+    "version": {
+     "type": "string"
+    },
+    "executable": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "module",
+    "version",
+    "executable"
+   ]
+  },
+  "launch": {
+   "type": "object",
+   "properties": {
+    "pre_launch": {
+     "type": "string"
+    },
+    "command_template": {
+     "type": "string",
+     "pattern": "\\{run_id\\}"
+    }
+   },
+   "required": [
+    "pre_launch",
+    "command_template"
+   ]
+  },
+  "resources": {
+   "type": "object",
+   "properties": {
+    "mpi_ranks": {
+     "type": "integer"
+    },
+    "omp_threads": {
+     "type": "integer"
+    },
+    "memory_GB": {
+     "type": "number"
+    },
+    "walltime": {
+     "type": "string"
+    },
+    "partition": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "mpi_ranks",
+    "omp_threads",
+    "memory_GB",
+    "walltime"
+   ]
+  },
+  "remote_workdir": {
+   "type": "string"
+  },
+  "sources": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "minItems": 1
+  },
+  "availability_confirmed": {
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "schema",
+  "name",
+  "bigdft",
+  "launch",
+  "resources",
+  "remote_workdir",
+  "sources",
+  "availability_confirmed"
+ ],
+ "additionalProperties": false
+}

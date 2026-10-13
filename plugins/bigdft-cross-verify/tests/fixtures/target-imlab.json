@@ -1,0 +1,11 @@
+{
+ "schema": "bridge/target/1",
+ "name": "imlab",
+ "bigdft": {"module": "bigdft/rho0", "version": "1.9.5", "executable": "bigdft"},
+ "launch": {"pre_launch": "module load bigdft/rho0\nexport OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK",
+            "command_template": "mpirun -np $SLURM_NTASKS --map-by slot:PE=$SLURM_CPUS_PER_TASK bigdft -n {run_id}; echo $? > exit_status"},
+ "resources": {"mpi_ranks": 8, "omp_threads": 2, "memory_GB": 16, "walltime": "02:00:00", "partition": "main"},
+ "remote_workdir": "~/bridge-runs/fisicaro2023",
+ "sources": ["test fixture copied from a 2026-10-05 IMLab run: module show bigdft/rho0; working jobspec (mpirun, explicit memory)"],
+ "availability_confirmed": true
+}

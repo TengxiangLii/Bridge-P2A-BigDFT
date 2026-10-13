@@ -1,0 +1,632 @@
+{
+ "schema": "bridge/profile/2",
+ "id": "fisicaro2023-isomer-stability",
+ "version": "2.0.0",
+ "status": "reviewed",
+ "paper": {
+  "doi": "10.1039/D2MA01088G",
+  "title": "Principles of isomer stability in small clusters"
+ },
+ "tier": "same_code",
+ "settings": {
+  "code": {
+   "state": "stated",
+   "value": "BigDFT",
+   "quote": "coupling the MH method with the BigDFT package",
+   "location": "§II Methods"
+  },
+  "code_version": {
+   "state": "unknown",
+   "note": "not stated in the paper or ESI"
+  },
+  "xc_functional": {
+   "state": "stated",
+   "value": "PBE (Libxc)",
+   "quote": "the Perdew–Burke–Ernzerhof functional",
+   "location": "§II Methods"
+  },
+  "xc_per_element_exceptions": {
+   "state": "stated",
+   "value": "Mg: LDA",
+   "quote": "Except for Mg where we have used for backward compatibility",
+   "location": "§II Methods"
+  },
+  "basis_or_grid": {
+   "state": "stated",
+   "value": "wavelets (Daubechies per the title of ref. 47); grid spacing and extent not stated",
+   "quote": "BigDFT uses wavelets as basis functions",
+   "location": "§II Methods"
+  },
+  "pseudopotentials_or_projectors": {
+   "state": "stated",
+   "value": "soft norm-conserving with non-linear core corrections (refs 50 GTH 1996, 51 Willand 2013); file versions not stated",
+   "quote": "Soft norm-conserving pseudo-potentials including non-linear core corrections",
+   "location": "§II Methods"
+  },
+  "boundary_conditions": {
+   "state": "stated",
+   "value": "free (isolated clusters)",
+   "quote": "allows for an exact treatment of free boundary conditions",
+   "location": "§II Methods"
+  },
+  "spin_treatment": {
+   "state": "stated",
+   "value": "spin-polarized for odd electron counts; singlet assumed for even counts",
+   "quote": "Spin polarized calculations were performed for all the clusters with an odd number of electrons.",
+   "location": "§II Methods"
+  },
+  "charge_states": {
+   "state": "stated",
+   "value": "q = -1, 0, 1, 2 (abstract); Si15 also has q = +3 (Table 1 and dataset)",
+   "quote": "the cluster charge state",
+   "location": "Abstract"
+  },
+  "smearing_or_electronic_temperature": {
+   "state": "stated",
+   "value": "zero electronic temperature; 3e-3 Ha for Mg clusters with an odd number of electrons",
+   "quote": "A zero electronic temperature was used for all the calculations",
+   "location": "§II Methods"
+  },
+  "scf_convergence": {
+   "state": "unknown",
+   "note": "not stated in the paper or ESI"
+  },
+  "geometry_relaxation_criterion": {
+   "state": "stated",
+   "value": "Hellmann-Feynman forces below 0.5 meV/Angstrom",
+   "quote": "until forces were less than 0.5 meV",
+   "location": "§II Methods"
+  },
+  "dispersion_correction": {
+   "state": "unknown",
+   "note": "not mentioned in the paper"
+  },
+  "solvation": {
+   "state": "not_applicable",
+   "reason": "isolated clusters with free boundary conditions; the soft-sphere cavity is only a geometric descriptor"
+  },
+  "k_points": {
+   "state": "not_applicable",
+   "reason": "isolated clusters with free boundary conditions"
+  },
+  "structure_source": {
+   "state": "stated",
+   "value": "Materials Cloud Archive record j7hwv-81q79 (doi:10.24435/materialscloud:46-nr)",
+   "quote": "openly available on the Materials Cloud Archive",
+   "location": "Data availability"
+  }
+ },
+ "structures": {
+  "al13m1-r0": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 global minimum (dataset rank 0, min0001.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0001.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "a278ce671304640f6cb80bd07a25a9cde1657d95d8009ea54bad8b42d4d206a6"
+  },
+  "al13m1-r1": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 isomer at dataset rank 1 (min0002.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0002.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "29a25b436081df4dd860108625b19061cfa561287b785f9023892b17a3c0d24d"
+  },
+  "al13m1-r2": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 isomer at dataset rank 2 (min0003.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0003.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "893b10109952e1b76a68aee57d3ee6ede1f31080a95e5a754c4a5352424bda0c"
+  },
+  "al13m1-r3": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 isomer at dataset rank 3 (min0004.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0004.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "9c0fc9a89d687ffbd1cc7ee9849bdf67e322be37d245e50c6d07b1f4240d5ff7"
+  },
+  "al13m1-r4": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 isomer at dataset rank 4 (min0005.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0005.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "fd903919d71f75ec5a5f9e6fd9ce574d8bbeaa5afb92713c99cd226d1addd2d6"
+  },
+  "al13m1-r5": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 isomer at dataset rank 5 (min0006.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Al13/Al13m1/min0006.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "b6dbc720632b4d79acaf318971684643e8903e7513c6ffd8487183cc501ebb1d"
+  },
+  "si10-r0": {
+   "formula": "Si10",
+   "charge": 0,
+   "multiplicity": 1,
+   "label": "Si10 global minimum (dataset rank 0, min000000001.xyz)",
+   "authority": {
+    "kind": "dataset",
+    "locator": {
+     "url": "https://archive.materialscloud.org/api/records/j7hwv-81q79/files/all_minima_xyz_structures.tar.gz/content",
+     "md5": "d8e75cc8c91d8143fc2ed89259a9741e",
+     "member": "all_minima_xyz_structures/Si10/Si10/min000000001.xyz",
+     "format": "bigdft_xyz"
+    },
+    "precision_A": 1e-06,
+    "citation": "Materials Cloud Archive 2023.36, doi:10.24435/materialscloud:46-nr"
+   },
+   "sha256": "eace72386247537bd22ef2341a40c04706cae87b69f5325927ab353ddcd8f7fb"
+  }
+ },
+ "reference_needs": {
+  "ref:al13m1-gap": {
+   "claim": "al13m1-homo-lumo-gap",
+   "structure": "al13m1-r0",
+   "quantity": "Homo-Lumo-gap",
+   "description": "stored HOMO-LUMO gap (eV) of the isomer"
+  },
+  "ref:al13m1-vie": {
+   "claim": "al13m1-vie",
+   "structure": "al13m1-r0",
+   "quantity": "Vertical-Ionization-energy",
+   "description": "stored vertical ionization energy (eV) of the isomer"
+  },
+  "ref:si10-gap": {
+   "claim": "si10-homo-lumo-gap",
+   "structure": "si10-r0",
+   "quantity": "Homo-Lumo-gap",
+   "description": "stored HOMO-LUMO gap (eV) of the isomer"
+  },
+  "ref:al13m1-degeneracy": {
+   "claim": "al13m1-eigenvalue-degeneracy",
+   "structure": "al13m1-r0",
+   "quantity": "Eigenvalue-degeneracy",
+   "description": "stored degeneracy pattern (list of group sizes) of the isomer"
+  }
+ },
+ "claims": [
+  {
+   "id": "al13m1-homo-lumo-gap",
+   "template": "homo_lumo_gap@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": 1.88213733039336,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Homo-Lumo-gap (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "cross_checks": [
+    {
+     "value": 1.88,
+     "unit": "eV",
+     "confidence": "table",
+     "quote": null,
+     "location": "table:assets/table/table-1.csv#row=Al13^-1;col=Homo–Lumo gap [eV]",
+     "printed_decimals": 2
+    }
+   ]
+  },
+  {
+   "id": "al13m1-eigenvalue-degeneracy",
+   "template": "eigenvalue_degeneracy@1",
+   "parameters": {
+    "species": "al13m1-r0",
+    "threshold_Ha": 0.0001
+   },
+   "reference": {
+    "value": [
+     1,
+     3,
+     5,
+     1,
+     3,
+     3,
+     4
+    ],
+    "unit": "pattern",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Eigenvalue-degeneracy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "cross_checks": [
+    {
+     "value": "[1, 3, 5, 1, 3, 3, 4]",
+     "unit": "pattern",
+     "confidence": "table",
+     "quote": null,
+     "location": "table:assets/table/table-2.csv#row=Al13^-1;col=List of all KS DFT degeneracies"
+    }
+   ],
+   "definition_note": "threshold 1e-4 Ha is the dataset convention (all_minima_data_analysis.ipynb, Eigenvalue-degeneracy); the paper's 'approximate degeneracy' (less than 10^-2 Ha, §III.B) is the looser criterion behind the starred numbers in Table 1 and is not this claim"
+  },
+  {
+   "id": "al13m1-energy-ordering",
+   "template": "relative_energy_ordering@1",
+   "parameters": {
+    "isomers": [
+     "al13m1-r0",
+     "al13m1-r1",
+     "al13m1-r2",
+     "al13m1-r3",
+     "al13m1-r4",
+     "al13m1-r5"
+    ]
+   },
+   "reference": {
+    "value": [
+     0.0,
+     0.03569401914,
+     0.0541853467791,
+     0.0566442837459,
+     0.0671746034537,
+     0.0684842665362
+    ],
+    "unit": "Ha",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Fingerprint-distance-GM[0] (energy above the global minimum) (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "definition_note": "the reference values are Fingerprint-distance-GM[0], which equal the KS-Final-energy differences to 5e-9 Ha; ranks 4 and 5 are only 36 meV apart"
+  },
+  {
+   "id": "al13m1-vie",
+   "template": "vertical_ionization_energy@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": 3.567871607220811,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Vertical-Ionization-energy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   }
+  },
+  {
+   "id": "al13m1-vea",
+   "template": "vertical_electron_affinity@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": -1.4665926176456832,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Vertical-Electron-Affinity (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "definition_note": "stored sign convention is E(N) - E(N+1), as in the template; the N+1 dianion is unbound (stored VEA -1.47 eV); its energy depends on the grid extent (rmult), which the paper does not state"
+  },
+  {
+   "id": "al13m1-hardness",
+   "template": "chemical_hardness@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": 2.517232112433247,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Chemical-Hardness (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "cross_checks": [
+    {
+     "value": 2.52,
+     "unit": "eV",
+     "confidence": "table",
+     "quote": null,
+     "location": "table:assets/table/table-1.csv#row=Al13^-1;col=Chemical Hardness [eV]",
+     "printed_decimals": 2
+    }
+   ],
+   "definition_note": "uses E(N+1) of the unbound dianion; the N+1 dianion is unbound (stored VEA -1.47 eV); its energy depends on the grid extent (rmult), which the paper does not state"
+  },
+  {
+   "id": "al13m1-total-energy",
+   "template": "total_energy@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": -26.672682316180612,
+    "unit": "Ha",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key KS-Final-energy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   }
+  },
+  {
+   "id": "si10-homo-lumo-gap",
+   "template": "homo_lumo_gap@1",
+   "parameters": {
+    "species": "si10-r0"
+   },
+   "reference": {
+    "value": 2.09055726189791,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Homo-Lumo-gap (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "cross_checks": [
+    {
+     "value": 2.09,
+     "unit": "eV",
+     "confidence": "table",
+     "quote": null,
+     "location": "table:assets/table/table-1.csv#row=Si10;col=Homo–Lumo gap [eV]",
+     "printed_decimals": 2
+    }
+   ]
+  },
+  {
+   "id": "si10-eigenvalue-degeneracy",
+   "template": "eigenvalue_degeneracy@1",
+   "parameters": {
+    "species": "si10-r0",
+    "threshold_Ha": 0.0001
+   },
+   "reference": {
+    "value": [
+     1,
+     1,
+     2,
+     1,
+     2,
+     2,
+     1,
+     1,
+     2,
+     1,
+     1,
+     2,
+     2,
+     1
+    ],
+    "unit": "pattern",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Eigenvalue-degeneracy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "definition_note": "threshold 1e-4 Ha is the dataset convention (all_minima_data_analysis.ipynb, Eigenvalue-degeneracy); the paper's 'approximate degeneracy' (less than 10^-2 Ha, §III.B) is the looser criterion behind the starred numbers in Table 1 and is not this claim"
+  },
+  {
+   "id": "si10-hardness",
+   "template": "chemical_hardness@1",
+   "parameters": {
+    "species": "si10-r0"
+   },
+   "reference": {
+    "value": 2.939850016660852,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Chemical-Hardness (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "cross_checks": [
+    {
+     "value": 2.94,
+     "unit": "eV",
+     "confidence": "table",
+     "quote": null,
+     "location": "table:assets/table/table-1.csv#row=Si10;col=Chemical Hardness [eV]",
+     "printed_decimals": 2
+    }
+   ],
+   "definition_note": "Si10^-1 is bound (stored VEA +1.98 eV), so this hardness does not depend on an unbound anion"
+  },
+  {
+   "id": "al13m1-r1-eigenvalue-degeneracy",
+   "template": "eigenvalue_degeneracy@1",
+   "parameters": {
+    "species": "al13m1-r1",
+    "threshold_Ha": 0.0001
+   },
+   "reference": {
+    "value": [
+     1,
+     1,
+     2,
+     2,
+     1,
+     2,
+     1,
+     2,
+     1,
+     2,
+     1,
+     1,
+     2,
+     1
+    ],
+    "unit": "pattern",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Eigenvalue-degeneracy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "definition_note": "threshold 1e-4 Ha is the dataset convention (all_minima_data_analysis.ipynb, Eigenvalue-degeneracy); the paper's 'approximate degeneracy' (less than 10^-2 Ha, §III.B) is the looser criterion behind the starred numbers in Table 1 and is not this claim; Table 2 lists this isomer as Al13^-1 minimum 2 (its row has no first-column key, so no table cross-check)"
+  },
+  {
+   "id": "al13m1-r3-eigenvalue-degeneracy",
+   "template": "eigenvalue_degeneracy@1",
+   "parameters": {
+    "species": "al13m1-r3",
+    "threshold_Ha": 0.0001
+   },
+   "reference": {
+    "value": [
+     1,
+     1,
+     2,
+     1,
+     2,
+     1,
+     2,
+     1,
+     2,
+     2,
+     1,
+     2,
+     1,
+     1
+    ],
+    "unit": "pattern",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Eigenvalue-degeneracy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   },
+   "definition_note": "threshold 1e-4 Ha is the dataset convention (all_minima_data_analysis.ipynb, Eigenvalue-degeneracy); the paper's 'approximate degeneracy' (less than 10^-2 Ha, §III.B) is the looser criterion behind the starred numbers in Table 1 and is not this claim; Table 2 lists this isomer as Al13^-1 minimum 4 (no first-column key, so no table cross-check)"
+  }
+ ],
+ "default_claims": [
+  "al13m1-homo-lumo-gap",
+  "al13m1-eigenvalue-degeneracy",
+  "al13m1-energy-ordering",
+  "al13m1-vie"
+ ],
+ "excluded": [
+  {
+   "statement": "The listed structures are the true global minima of their potential energy surfaces.",
+   "reason": "requires a Minima Hopping search; only the ordering among supplied isomers is testable (al13m1-energy-ordering)",
+   "location": "§II Methods"
+  },
+  {
+   "statement": "Adiabatic ionization energies (dataset key Adiabatic-Ionization-energy).",
+   "reason": "not defined in the paper text; which relaxed (N-1) structure was used is not stated",
+   "location": "dataset"
+  },
+  {
+   "statement": "Correlation trends across whole potential energy surfaces (Figs 2-7, 17-18).",
+   "reason": "would need thousands of single points; not a per-claim re-verification",
+   "location": "Figs 2-7, 17-18"
+  },
+  {
+   "statement": "Transition states, saddle points and disconnectivity graphs (Figs 8 and 16).",
+   "reason": "needs saddle-point searches (minima hopping guided path search); not single-point or relaxation claims",
+   "location": "§II Methods; Figs 8, 16"
+  },
+  {
+   "statement": "Density of states under random atomic displacements (Fig. 12).",
+   "reason": "random displacements are not published, so the structures can't be reproduced",
+   "location": "Fig. 12"
+  },
+  {
+   "statement": "Al12X substitution series other than Al12Si (Figs 19-20: Al12N^+1, Al12P^+1, Al12As^+1, Al12Sb^+1).",
+   "reason": "these structures are not in the Materials Cloud record, so there is no structure authority",
+   "location": "§III.C; Figs 19-20"
+  },
+  {
+   "statement": "Purely geometric descriptors of stored structures (coordination numbers, soft-sphere surface/volume, fingerprint distance, eccentricity).",
+   "reason": "properties of the published geometries, not DFT results; nothing for BigDFT to recompute",
+   "location": "§III.A; dataset"
+  }
+ ],
+ "needs_template": [
+  {
+   "statement": "Point group of the global minimum (Table 1 'Point group', e.g. Al13^-1 is Ih).",
+   "location": "Table 1",
+   "suggested_quantity": "point group of a BigDFT-relaxed geometry (needs a relax recipe and a symmetry-analysis template); the dataset used pymatgen point-group analysis with tol=0.0009"
+  },
+  {
+   "statement": "Average bond distance of the global minimum (Table 1).",
+   "location": "Table 1; §III.A.1 eqns (1)-(2)",
+   "suggested_quantity": "zeta-weighted pair-average bond distance of a relaxed geometry (verified formula: sum zeta_kl d_kl / sum zeta_kl)"
+  },
+  {
+   "statement": "Shape factor S (eqn 3) of relaxed geometries.",
+   "location": "§III.A.3 eqn (3)",
+   "suggested_quantity": "inertia-tensor shape factor of a relaxed geometry"
+  }
+ ],
+ "notes": [
+  "Table 1 'KS DFT degeneracies' lists distinct degeneracy values (starred = approximate); Table 2 and the dataset list every occupied level in order. Compare with the dataset list.",
+  "Stored isomer order follows energy above the global minimum; in 22 systems KS-Final-energy is not strictly monotonic along that order.",
+  "Mg clusters use LDA in the paper; the prototype mapping has no LDA NLCC pseudopotential for Mg, so Mg claims are not offered.",
+  "Na and Ge have no pseudopotential in the prototype mapping, so Na and Ge claims are not offered.",
+  "Al12Si: the dataset stores 11 keys (no VIE, VEA, hardness or eigenvalue degeneracy); Table 1 gives its gap (2.00 eV) and hardness (2.73 eV). Al12Si claims are not in this profile version (the Si+Al pseudopotential pair is untested)."
+ ],
+ "reviewers": [
+  {
+   "who": "fresh reviewer agent (S7, independent of the author)",
+   "role": "S7 review",
+   "date": "2026-10-13",
+   "scope": "settings, claims, references, structures, exclusions; see review-s7.md"
+  },
+  {
+   "who": "TengxiangLii (with Claude)",
+   "role": "author",
+   "date": "2026-10-13",
+   "scope": "applied S7 findings F1-F5 and notes"
+  }
+ ]
+}

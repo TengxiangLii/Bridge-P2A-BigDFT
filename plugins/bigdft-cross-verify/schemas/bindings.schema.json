@@ -1,0 +1,107 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "bindings",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/bindings/1"
+  },
+  "profile_sha256": {
+   "type": "string"
+  },
+  "manifest_sha256": {
+   "type": "string"
+  },
+  "bindings": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "properties": {
+     "status": {
+      "enum": [
+       "bound",
+       "unbound",
+       "mismatch"
+      ]
+     },
+     "required": {
+      "type": "boolean"
+     },
+     "source": {},
+     "method": {
+      "enum": [
+       "hash",
+       "rmsd",
+       "value",
+       "none"
+      ]
+     },
+     "observed_sha256": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "canonical_sha256": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "rmsd_A": {
+      "type": [
+       "number",
+       "null"
+      ]
+     },
+     "observed": {},
+     "expected": {},
+     "attempts": {
+      "type": "array"
+     }
+    },
+    "required": [
+     "status",
+     "required",
+     "source",
+     "method",
+     "attempts"
+    ]
+   }
+  },
+  "findings": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "enum": [
+       "data_paper_mismatch",
+       "unbound_required",
+       "unbound_optional"
+      ]
+     },
+     "need": {
+      "type": "string"
+     },
+     "detail": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind",
+     "need",
+     "detail"
+    ]
+   }
+  }
+ },
+ "required": [
+  "schema",
+  "profile_sha256",
+  "manifest_sha256",
+  "bindings",
+  "findings"
+ ],
+ "additionalProperties": false
+}

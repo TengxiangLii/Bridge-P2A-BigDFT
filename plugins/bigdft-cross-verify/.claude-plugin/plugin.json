@@ -1,0 +1,8 @@
+{
+  "name": "bigdft-cross-verify",
+  "description": "Re-verify a paper's calculations with BigDFT on top of a Paper2Agent (P2A) agent: registry profiles, probe-gated bindings to any P2A agent, deterministic run plans, convergence rounds and verdicts. Prototype: Fisicaro et al. 2023.",
+  "version": "2.0.0-proto",
+  "author": {"name": "TengxiangLii"},
+  "license": "MIT",
+  "keywords": ["bigdft", "dft", "reproducibility", "paper2agent", "verification"]
+}

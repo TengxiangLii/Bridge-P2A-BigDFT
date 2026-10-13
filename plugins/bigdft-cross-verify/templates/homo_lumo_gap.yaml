@@ -1,0 +1,16 @@
+id: homo_lumo_gap
+version: 1
+status: draft
+quantity: "Kohn-Sham HOMO-LUMO gap of a closed-shell structure"
+definition: "epsilon_LUMO - epsilon_HOMO from one spin-restricted SCF with virtual orbitals"
+kind: orbital_gap
+parameters: {species: {type: structure_ref, required: true}}
+requires: {closed_shell: true}   # open-shell gaps: definition_ambiguous
+units: eV
+tolerance_class: orbital_gap
+synonyms: ["HOMO-LUMO gap", "HOMO–LUMO gap", "KS gap", "electronic gap"]
+not_equivalent_to: ["fundamental gap (IE - EA)", "optical gap", "chemical hardness"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: true}}
+    stop_abs: 0.004      # eV

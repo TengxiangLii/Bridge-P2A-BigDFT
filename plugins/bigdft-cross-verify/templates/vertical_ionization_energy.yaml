@@ -1,0 +1,16 @@
+id: vertical_ionization_energy
+version: 1
+status: draft
+quantity: "energy to remove one electron at fixed geometry"
+definition: "VIE = E(N-1) - E(N), both at the N-electron geometry (frozen)"
+kind: energy_linear
+parameters: {species: {type: structure_ref, required: true}}
+units: eV
+tolerance_class: ionization_affinity
+synonyms: ["vertical ionization energy", "vertical ionization potential", "VIP", "vertical IE"]
+not_equivalent_to: ["-epsilon_HOMO (Koopmans)", "adiabatic ionization energy"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}, "N-1": {charge_offset: 1, virtual: false}}
+    combine: {"N-1": 1.0, N: -1.0}
+    stop_abs: 0.005      # eV

@@ -1,0 +1,163 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "agent-manifest",
+ "type": "object",
+ "properties": {
+  "manifest_version": {
+   "const": 1
+  },
+  "paper": {
+   "type": "object",
+   "properties": {
+    "doi": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "title": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "detected_from": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "doi",
+    "title",
+    "detected_from"
+   ]
+  },
+  "paper_skill": {
+   "type": "object",
+   "properties": {
+    "path": {
+     "type": "string"
+    },
+    "sha256_tree": {
+     "type": "string"
+    },
+    "tables": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "image_only_regions": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "required": [
+    "path",
+    "sha256_tree",
+    "tables",
+    "image_only_regions"
+   ]
+  },
+  "mcp": {
+   "type": [
+    "object",
+    "null"
+   ],
+   "properties": {
+    "server": {
+     "type": "string"
+    },
+    "launch": {
+     "type": "object",
+     "properties": {
+      "command": {
+       "type": "string"
+      },
+      "args": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "env_names": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "config_file": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "command",
+      "args",
+      "env_names"
+     ]
+    },
+    "tools": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string"
+       },
+       "description": {
+        "type": "string"
+       },
+       "input_schema": {
+        "type": "object"
+       }
+      },
+      "required": [
+       "name",
+       "description",
+       "input_schema"
+      ]
+     }
+    }
+   },
+   "required": [
+    "server",
+    "launch",
+    "tools"
+   ]
+  },
+  "data_resources": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string"
+     },
+     "url": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "kind",
+     "url"
+    ]
+   }
+  },
+  "p2a_mode": {
+   "enum": [
+    "paper_only",
+    "code_only",
+    "combined"
+   ]
+  }
+ },
+ "required": [
+  "manifest_version",
+  "paper",
+  "paper_skill",
+  "mcp",
+  "data_resources",
+  "p2a_mode"
+ ]
+}

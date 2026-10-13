@@ -1,0 +1,32 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "round",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/round/1"
+  },
+  "run_plan_sha256": {
+   "type": "string"
+  },
+  "next_batch": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "claims": {
+   "type": "object"
+  },
+  "done": {
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "schema",
+  "run_plan_sha256",
+  "next_batch",
+  "claims",
+  "done"
+ ]
+}

@@ -1,0 +1,211 @@
+{
+ "schema": "bridge/profile/2",
+ "id": "fisicaro2023-case2-fixture",
+ "version": "0.0.1",
+ "status": "draft",
+ "paper": {
+  "doi": "10.1039/D2MA01088G",
+  "title": "Principles of isomer stability in small clusters"
+ },
+ "tier": "same_code",
+ "settings": {
+  "code": {
+   "state": "stated",
+   "value": "BigDFT",
+   "quote": "coupling the MH method with the BigDFT package",
+   "location": "§II Methods"
+  },
+  "code_version": {
+   "state": "unknown",
+   "note": "not stated in the paper or ESI"
+  },
+  "xc_functional": {
+   "state": "stated",
+   "value": "PBE (Libxc)",
+   "quote": "the Perdew–Burke–Ernzerhof functional",
+   "location": "§II Methods"
+  },
+  "xc_per_element_exceptions": {
+   "state": "stated",
+   "value": "Mg: LDA",
+   "quote": "Except for Mg where we have used for backward compatibility",
+   "location": "§II Methods"
+  },
+  "basis_or_grid": {
+   "state": "stated",
+   "value": "Daubechies wavelets; grid spacing and extent not stated",
+   "quote": "BigDFT uses wavelets as basis functions",
+   "location": "§II Methods"
+  },
+  "pseudopotentials_or_projectors": {
+   "state": "stated",
+   "value": "soft norm-conserving with non-linear core corrections (refs 50 GTH 1996, 51 Willand 2013); file versions not stated",
+   "quote": "Soft norm-conserving pseudo-potentials including non-linear core corrections",
+   "location": "§II Methods"
+  },
+  "boundary_conditions": {
+   "state": "stated",
+   "value": "free (isolated clusters)",
+   "quote": "allows for an exact treatment of free boundary conditions",
+   "location": "§II Methods"
+  },
+  "spin_treatment": {
+   "state": "stated",
+   "value": "spin-polarized for odd electron counts; singlet assumed for even counts",
+   "quote": "Spin polarized calculations were performed for all the clusters with an odd number of electrons.",
+   "location": "§II Methods"
+  },
+  "charge_states": {
+   "state": "stated",
+   "value": "q = -1, 0, 1, 2 (dataset also has +3 for Si15)",
+   "quote": "the cluster charge state",
+   "location": "Abstract"
+  },
+  "smearing_or_electronic_temperature": {
+   "state": "stated",
+   "value": "zero electronic temperature; 3e-3 Ha for Mg clusters with an odd number of electrons",
+   "quote": "A zero electronic temperature was used for all the calculations",
+   "location": "§II Methods"
+  },
+  "scf_convergence": {
+   "state": "unknown",
+   "note": "not stated in the paper or ESI"
+  },
+  "geometry_relaxation_criterion": {
+   "state": "stated",
+   "value": "Hellmann-Feynman forces below 0.5 meV/Angstrom",
+   "quote": "until forces were less than 0.5 meV",
+   "location": "§II Methods"
+  },
+  "dispersion_correction": {
+   "state": "unknown",
+   "note": "not mentioned in the paper"
+  },
+  "solvation": {
+   "state": "not_applicable",
+   "reason": "isolated clusters with free boundary conditions; the soft-sphere cavity is only a geometric descriptor"
+  },
+  "k_points": {
+   "state": "not_applicable",
+   "reason": "isolated clusters with free boundary conditions"
+  },
+  "structure_source": {
+   "state": "stated",
+   "value": "Materials Cloud Archive record j7hwv-81q79 (doi:10.24435/materialscloud:46-nr)",
+   "quote": "openly available on the Materials Cloud Archive",
+   "location": "Data availability"
+  }
+ },
+ "structures": {
+  "al13m1-r0": {
+   "formula": "Al13",
+   "charge": -1,
+   "multiplicity": 1,
+   "label": "Al13^-1 global minimum (dataset rank 0, min0001.xyz)",
+   "authority": {
+    "kind": "paper_table",
+    "locator": {
+     "file": "assets/table/coordinates-al13m1-gm.csv",
+     "format": "paper_table_csv"
+    },
+    "precision_A": 0.001,
+    "citation": "synthetic fixture: Table S-coords"
+   },
+   "sha256": "e8daacfc12648370b241613efa9043806c5b3bac63d6d3fd39b930372dc011c7"
+  }
+ },
+ "reference_needs": {
+  "ref:al13m1-gap": {
+   "claim": "al13m1-homo-lumo-gap",
+   "structure": "al13m1-r0",
+   "quantity": "Homo-Lumo-gap",
+   "description": "stored HOMO-LUMO gap (eV) of the isomer"
+  }
+ },
+ "claims": [
+  {
+   "id": "al13m1-homo-lumo-gap",
+   "template": "homo_lumo_gap@1",
+   "parameters": {
+    "species": "al13m1-r0"
+   },
+   "reference": {
+    "value": 1.88213733039336,
+    "unit": "eV",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Homo-Lumo-gap (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   }
+  },
+  {
+   "id": "al13m1-eigenvalue-degeneracy",
+   "template": "eigenvalue_degeneracy@1",
+   "parameters": {
+    "species": "al13m1-r0",
+    "threshold_Ha": 0.0001
+   },
+   "reference": {
+    "value": [
+     1,
+     3,
+     5,
+     1,
+     3,
+     3,
+     4
+    ],
+    "unit": "pattern",
+    "confidence": "dataset",
+    "quote": null,
+    "location": "dataset key Eigenvalue-degeneracy (Materials Cloud j7hwv-81q79, all_minima_data.npy)"
+   }
+  }
+ ],
+ "default_claims": [
+  "al13m1-homo-lumo-gap",
+  "al13m1-eigenvalue-degeneracy"
+ ],
+ "excluded": [
+  {
+   "statement": "The listed structures are the true global minima of their potential energy surfaces.",
+   "reason": "requires a Minima Hopping search; only the ordering among supplied isomers is testable (al13m1-energy-ordering)",
+   "location": "§II Methods"
+  },
+  {
+   "statement": "Adiabatic ionization energies (dataset key Adiabatic-Ionization-energy).",
+   "reason": "not defined in the paper text; which relaxed (N-1) structure was used is not stated",
+   "location": "dataset"
+  },
+  {
+   "statement": "Correlation trends across whole potential energy surfaces (Figs 2-7, 17-18).",
+   "reason": "would need thousands of single points; not a per-claim re-verification",
+   "location": "Figs 2-7, 17-18"
+  },
+  {
+   "statement": "Properties of Al12Si systems beyond energies, gap and degeneracy.",
+   "reason": "the dataset stores only 11 of 18 keys for Al12Si; no reference for VIE/VEA/hardness",
+   "location": "dataset"
+  }
+ ],
+ "needs_template": [
+  {
+   "statement": "Point group of the global minimum (Table 1 'Point group', e.g. Al13^-1 is Ih).",
+   "location": "Table 1",
+   "suggested_quantity": "point group of a BigDFT-relaxed geometry (needs a relax recipe and a symmetry-analysis template)"
+  },
+  {
+   "statement": "Average bond distance of the global minimum (Table 1).",
+   "location": "Table 1; §III.A.1 eqns (1)-(2)",
+   "suggested_quantity": "zeta-weighted pair-average bond distance of a relaxed geometry (verified formula: sum zeta_kl d_kl / sum zeta_kl)"
+  },
+  {
+   "statement": "Shape factor S (eqn 3) of relaxed geometries.",
+   "location": "§III.A.3 eqn (3)",
+   "suggested_quantity": "inertia-tensor shape factor of a relaxed geometry"
+  }
+ ],
+ "notes": [
+  "Synthetic test fixture (design C3, structure authority case 2). Not a registry entry."
+ ],
+ "reviewers": []
+}

@@ -1,0 +1,3206 @@
+---
+ Code logo:
+   " ___________________________________A fast and precise DFT wavelet code__
+    |                                                                        |
+    |                               :-------::.                              |
+    |                               -==========-     .::.                    |
+    |               .               -===   .:===-   .====:                   |
+    |               ::              -===     -===.   -===.                   |
+    |              .::.             -===     -===      .         .....       |
+    |              :::.        .    -===..::-===.    -===.    :-=======:-=== |
+    |             .::::       .:.   -===========:.   -===.  .====-::::-===== |
+    |     ..      .::::.      .::   -===:::::-====:  -===. .====.      :==== |
+    |    .::.     :::::.      :::.  -===       -===. -===. :===:        -=== |
+    |    .::.    .::::::     .:::.  -===       :===: -===. :===:        :=== |
+    |    ::::    .::::::.    .::::  -===      :====. -===. .====.      .==== |
+    | ---====::::-======-::::-====--====----======.  -===.  .====-::::-===== |
+    | =======-::-========::::==================-.    -===.    :========:-=== |
+    | ........::..........::................          ...       ...:..  -=== |
+    |         ..          ::.                                           ===- |
+    | .......             .. .........................................:====. |
+    | ===========--:.       .============================================-.  |
+    | ====----=======-.     .====---------------=====------------------:.    |
+    | ====      ..-====-.   .===-               :===:                        |
+    | ====         .-====   .===-               :===:      .......           |
+    | ====           -===-  .===-........       :===:    .:::::::::.         |
+    | ====            ====  .============:      :===:   ::::::::::::.        |
+    | ====            -===  .====--------.      :===:  .:::::::::::::        |
+    | ====           .====  .===-               :===:   :::::::::::::        |
+    | ====           -===:  .===-               :===:   .:::::::::::.        |
+    | ====         :====-   .===-               :===:     ..:::::..          |
+    | ====   ...:-=====:    .===-               :===:                        |
+    | ==============-:      .===-               :===:                        |
+    | ======-----:..        .===-               :===:                        |
+    |________________________________________________________www.bigdft.org__| "
+
+ Reference Paper                       : The Journal of Chemical Physics 152, 194110 (2020)
+ Version Number                        : 1.9.5
+ Timestamp of this run                 : 2026-10-05 14:39:38.328
+ Root process Hostname                 : im3
+ Number of MPI tasks                   :  10
+ OpenMP parallelization                :  Yes
+ Maximal OpenMP threads per MPI task   :  3
+ MPI tasks of root process node        :  10
+  #------------------------------------------------------------------ Code compiling options
+ Compilation options:
+   Configure arguments:
+     " '--prefix' '/opt/apps/bigdft/elliot_rho0' 'FC=mpifort' 'CC=gcc' 'CXX=g++' 
+     'FCFLAGS=-O2 -g -fopenmp -mtune=native' 
+     '--with-ext-linalg=-L/opt/libs/openblas/0.3.28/lib -lopenblas' 
+     'LDFLAGS=-L/opt/apps/bigdft/elliot_rho0/lib ' 
+     'C_INCLUDE_PATH=/opt/apps/bigdft/elliot_rho0/include' 
+     'PKG_CONFIG_PATH=/opt/apps/bigdft/elliot_rho0/lib/pkgconfig:/opt/apps/bigdft/elliot_rho0
+     /share/pkgconfig:/opt/libs/fftw/3.3.10-mpi/lib/pkgconfig:/opt/libs/openblas/0.3.28/lib/p
+     kgconfig:/opt/apps/openmpi/5.0.7/lib/pkgconfig'"
+   Compilers (CC, FC, CXX)             :  [ gcc, mpifort, g++ ]
+   Compiler flags:
+     CFLAGS                            : -g -O2
+     FCFLAGS:
+       -O2 -g -fopenmp -mtune=native -fallow-argument-mismatch  
+       -I/opt/apps/bigdft/elliot_rho0/include
+     CXXFLAGS                          : -g -O2
+  #------------------------------------------------------------------------ Input parameters
+ radical                               : Al13m1_min0001_h045_r6-8
+ outdir                                : ./
+ logfile                               : Yes
+ run_from_files                        : Yes
+ skip                                  : No
+ dft:
+   ixc                                 : -101130 # Exchange-correlation parameter (LDA=1,PBE=11)
+   hgrids                              : 0.45 #   Grid spacing in the three directions (bohr)
+   rmult: [6.0, 8.0] #                            c(f)rmult*radii_cf(:,1(2))=coarse(fine) atom-based radius
+   qcharge                             : -1 #     Charge of the system. Can be integer or real.
+   nspin                               : 1 #      Spin polarization treatment
+   gnrm_cv                             : 1.e-5 #  Convergence criterion gradient
+   itermax                             : 100 #    Max. iterations of wfn. opt. steps
+   nrepmax                             : 3 #      Max. number of re-diag. runs
+   norbv                               : 8 #      Davidson subspace dimension (No. virtual orbitals)
+   nvirt                               : 8 #      No. of converged virtual orbs (< norbv)
+   itermax_virt                        : 200 #    Max. iterations of wfn. opt. steps for virtual orbitals
+   gnrm_cv_virt                        : 1.e-5 #  Convergence criterion gradient for virtual orbitals
+   disablesym                          : Yes #    Disable the symmetry detection
+   ngrids: [0, 0, 0] #                            Number of grid spacing division in each direction
+   elecfield: [0., 0., 0.] #                      Electric field (Ex,Ey,Ez)
+   mpol                                : 0 #      Total magnetic moment
+   itermin                             : 0 #      Minimal iterations of wfn. optimized steps
+   ncong                               : 6 #      No. of CG it. for preconditioning eq.
+   idsx                                : 6 #      Wfn. diis history
+   dispersion                          : 0 #      Dispersion correction potential (values 1,2,3,4,5), 0=none
+   inputpsiid                          : 0 #      Input guess wavefunctions
+   projection                          : gaussian # Projector construction method
+   output_denspot                      : 0 #      Output of the density or the potential
+   rbuf                                : 0. #     Length of the tail (AU)
+   ncongt                              : 30 #     No. of tail CG iterations
+   nplot                               : 0 #      No. of plotted orbs
+   external_potential                  : 0.0 #    Multipole moments of an external potential
+   calculate_strten                    : Yes #    Boolean to activate the calculation of the stress tensor. Might be set to No for 
+    #                                              performance reasons
+   plot_mppot_axes: [-1, -1, -1] #                Plot the potential generated by the multipoles along axes through this 
+    #                                              point. Negative values mean no plot.
+   plot_pot_axes: [-1, -1, -1] #                  Plot the potential along axes through this point. Negative values mean 
+    #                                              no plot.
+   occupancy_control                   : None #   Dictionary of the atomic matrices to be applied for a given iteration number
+   itermax_occ_ctrl                    : 0 #      Number of iterations of occupancy control scheme. Should be between itermin and 
+    #                                              itermax
+   nrepmax_occ_ctrl                    : 1 #      Number of re-diagonalizations of occupancy control scheme.
+   alpha_hf                            : -1.0 #   Part of the exact exchange contribution for hybrid functionals
+ psppar.Al:
+   Atomic number                       : 13
+   Local Pseudo Potential (HGH convention):
+     Coefficients (c1 .. c4): [-5.18802089974, 0.6961574711, 0.0, 0.0]
+     Rloc                              : 0.60224003597
+   No. of Electrons                    : 3
+   Non Linear Core Correction term:
+     Core charge                       : 35.88748558275994
+     Rcore                             : 0.4302905414
+   NonLocal PSP Parameters:
+   - Channel (l)                       : 0
+     Rloc                              : 0.451219678
+     h_ij terms: [6.17502916918, 3.6822889039, 0.0, -1.91493592966, 0.0, 0.0]
+   - Channel (l)                       : 1
+     Rloc                              : 0.53746997212
+     h_ij terms: [2.272958057, 0.0, 0.0, 0.0, 0.0, 0.0]
+   PAW patch                           : false
+   Pseudopotential XC                  : -101130
+   Pseudopotential type                : HGH-K + NLCC
+   Radii of active regions (AU):
+     Coarse                            : 2.208145859740855
+     Coarse PSP                        : 1.007756197725
+     Fine                              : 0.451219678
+     Source                            : PSP File
+   Source                              : generated by Saha,2015
+ psolver:
+   kernel:
+     screening                         : 0 #      Mu screening parameter
+     isf_order                         : 16 #     Order of the Interpolating Scaling Function family
+     stress_tensor                     : Yes #    Triggers the calculation of the stress tensor
+   environment:
+     cavity                            : none #   Type of the cavity
+     fd_order                          : 16 #     Order of the Finite-difference derivatives for the GPS solver
+     itermax                           : 200 #    Maximum number of iterations of the GPS outer loop
+     minres                            : 1.e-8 #  Convergence threshold of the loop
+     pb_method                         : none #   Defines the method for the Poisson Boltzmann Equation
+   setup:
+     accel                             : none #   Material Acceleration
+     taskgroup_size                    : 0 #      Size of the taskgroups of the Poisson Solver
+     global_data                       : No #     Charge density and Electrostatic potential are given by global arrays
+     verbose                           : Yes #    Verbosity switch
+     output                            : none #   Quantities to be plotted after the main solver routine
+ chess:
+   foe:
+     ef_interpol_det                   : 1.e-12 # FOE max determinant of cubic interpolation matrix
+     ef_interpol_chargediff            : 1.0 #    FOE max charge difference for interpolation
+     evbounds_nsatur                   : 3 #      Number of FOE cycles before the eigenvalue bounds are shrinked (linear)
+     evboundsshrink_nsatur             : 4 #      Maximal number of unsuccessful eigenvalue bounds shrinkings
+     fscale                            : 5.e-2 #  Initial guess for the error function decay length
+     fscale_lowerbound                 : 5.e-3 #  Lower bound for the error function decay length
+     fscale_upperbound                 : 5.e-2 #  Upper bound for the error function decay length
+     eval_range_foe: [-0.5, 0.5] #                Lower and upper bound of the eigenvalue spectrum, will be adjusted 
+      #                                            automatically if chosen unproperly
+     accuracy_foe                      : 1.e-5 #  Required accuracy for the Chebyshev fit for FOE
+     accuracy_ice                      : 1.e-8 #  Required accuracy for the Chebyshev fit for ICE (calculation of matrix powers)
+     accuracy_penalty                  : 1.e-5 #  Required accuracy for the Chebyshev fit for the penalty function
+     accuracy_entropy                  : 1.e-4 #  Required accuracy for the Chebyshev fit for the function to calculate the entropy term
+     betax_foe                         : -1000.0 # the exponent in the exponential penalty function which is used to determine the 
+      #                                            eigenvalue bounds for FOE
+     betax_ice                         : -1000.0 # the exponent in the exponential penalty function which is used to determine the 
+      #                                            eigenvalue bounds for ICE
+     occupation_function               : 102 #    the function to assign the occupation numbers
+     adjust_fscale                     : yes #    dynamically adjust the value of fscale or not
+     matmul_optimize_load_balancing    : no #     optimize the load balancing of the sparse matrix matrix multiplications (at the cost 
+      #                                            of memory unbalancing)
+     fscale_ediff_low                  : 5.e-5 #  lower bound for the optimal relative energy difference between the kernel and the 
+      #                                            control kernel
+     fscale_ediff_up                   : 1.e-4 #  upper bound for the optimal relative energy difference between the kernel and the 
+      #                                            control kernel
+   lapack:
+     blocksize_pdsyev                  : -8 #     SCALAPACK linear scaling blocksize for diagonalization
+     blocksize_pdgemm                  : -8 #     SCALAPACK linear scaling blocksize for matrix matrix multiplication
+     maxproc_pdsyev                    : 4 #      SCALAPACK linear scaling max num procs
+     maxproc_pdgemm                    : 4 #      SCALAPACK linear scaling max num procs
+   ntpoly:
+     serial_io                         : no #     turn on serial IO if MPI is having problem on a machine.
+     threshold_density                 : 0. #     threshold for flushing small matrix values of the density matrix.
+     convergence_density               : 1.e-10 # threshold for convergence of ntpoly purification calculation.
+     threshold_overlap                 : 0. #     threshold for flushing small matrix values of the overlap matrix.
+     convergence_overlap               : 1.e-10 # threshold for convergence of ntpoly overlap inverse calculation.
+     solver                            : 1 #      the density matrix solver to use.
+ output:
+   verbosity                           : 2 #      Verbosity of the output
+   atomic_density_matrix               : None #   Dictionary of the atoms for which the atomic density matrix has to be plotted
+   sdos                                : No #     Spatially-resolved density of states
+   orbitals                            : None #   Write KS orbitals in the full simulation domain (might take lot of disk space!)
+   apply_coeffs                        : yes #    apply the coefficients to the SFs when writing orbitals in LS-BigDFT
+   outputpsiid                         : wavefunction # basename of the output wavefunctions files written in the data directory
+   coupling_matrix                     : complete # kind of the coupling matrix which have to be dumped
+ kpt:
+   method                              : manual # K-point sampling method
+   kpt: #                                         Kpt coordinates
+   -  [0., 0., 0.]
+   wkpt: [1.] #                                   Kpt weights
+   bands                               : No #     For doing band structure calculation
+ geopt:
+   method                              : none #   Geometry optimisation method
+   ncount_cluster_x                    : 1 #      Maximum number of force evaluations
+   frac_fluct                          : 1. #     Fraction of force fluctuations. Stop if fmax < forces_fluct*frac_fluct
+   forcemax                            : 0. #     Max forces criterion when stop
+   randdis                             : 0. #     Random displacement amplitude
+   betax                               : 4. #     Stepsize for the geometry optimization
+   beta_stretchx                       : 5e-1 #   Stepsize for steepest descent in stretching mode direction (only if in biomode)
+ md:
+   mdsteps                             : 0 #      Number of MD steps
+   print_frequency                     : 1 #      Printing frequency for energy.dat and Trajectory.xyz files
+   temperature                         : 300.d0 # Initial temperature in Kelvin
+   timestep                            : 20.d0 #  Time step for integration (in a.u.)
+   no_translation                      : No #     Logical input to set translational correction
+   thermostat                          : none #   Activates a thermostat for MD
+   wavefunction_extrapolation          : 0 #      Activates the wavefunction extrapolation for MD
+   always_from_scratch                 : No #     When true, always restart wavefunctions from scratch to eliminate dissipation effects
+   restart_nose                        : No #     Restart Nose Hoover Chain information from md.restart
+   restart_pos                         : No #     Restart nuclear position information from md.restart
+   restart_vel                         : No #     Restart nuclear velocities information from md.restart
+ mix:
+   iscf                                : 0 #      Mixing scheme (default=0 i.e. direct minimization)
+   itrpmax                             : 1 #      Maximum number of diagonalisation iterations
+   rpnrm_cv                            : 1.e-4 #  Stop criterion on the residue of potential or density
+   norbsempty                          : 0 #      No. of additional bands
+   tel                                 : 0. #     Electronic temperature
+   occopt                              : 1 #      Smearing method
+   alphamix                            : 0. #     Multiplying factors for the mixing
+   alphadiis                           : 2. #     Multiplying factors for the electronic DIIS
+   diis_sd_switch_tolerance            : 0 #      Tolerance to switch between the Steppest Descent and the DIIS
+ sic:
+   sic_approach                        : none #   SIC (self-interaction correction) method
+   sic_alpha                           : 0. #     SIC downscaling parameter
+ tddft:
+   tddft_approach                      : none #   Time-Dependent DFT method
+   decompose_perturbation              : none #   Indicate the directory of the perturbation to be decomposed in the basis of empty 
+    #                                              states
+ mode:
+   method                              : dft #    Run method of BigDFT call
+   add_coulomb_force                   : No #     Boolean to add coulomb force on top of any of above selected force
+ perf:
+   debug                               : No #     Debug option
+   fftcache                            : 8192 #   Cache size for the FFT
+   accel                               : NO #     Acceleration (hardware)
+   ocl_platform                        : ~ #      Chosen OCL platform
+   ocl_devices                         : ~ #      Chosen OCL devices
+   blas                                : No #     CUBLAS acceleration
+   projrad                             : 15. #    Radius of the projector as a function of the maxrad
+   exctxpar                            : OP2P #   Exact exchange parallelisation scheme
+   ig_diag                             : Yes #    Input guess (T=Direct, F=Iterative) diag. of Ham.
+   ig_norbp                            : 5 #      Input guess Orbitals per process for iterative diag.
+   ig_blocks: [300, 800] #                        Input guess Block sizes for orthonormalisation
+   ig_tol                              : 1.0e-4 # Input guess Tolerance criterion
+   methortho                           : 0 #      Orthogonalisation
+   rho_commun                          : DEF #    Density communication scheme (DBL, RSC, MIX)
+   unblock_comms                       : OFF #    Overlap Communications of fields (OFF,DEN,POT)
+   linear                              : OFF #    Linear Input Guess approach
+   tolsym                              : 1.0e-8 # Tolerance for symmetry detection
+   signaling                           : No #     Expose calculation results on Network
+   signaltimeout                       : 0 #      Time out on startup for signal connection (in seconds)
+   domain                              : ~ #      Domain to add to the hostname to find the IP
+   inguess_geopt                       : 0 #      Input guess to be used during the optimization
+   store_index                         : Yes #    Store indices or recalculate them for linear scaling
+   store_overlap_matrices              : Yes #    Store all matrices relating to overlap powers, or recalculate them for linear scaling
+   psp_onfly                           : Yes #    Calculate pseudopotential projectors on the fly
+   multipole_preserving                : No #     (EXPERIMENTAL) Preserve the multipole moments of the ionic density
+   mp_isf                              : 16 #     (EXPERIMENTAL) Interpolating scaling function or lifted dual order for the multipole 
+    #                                              preserving
+   mixing_after_inputguess             : 1 #      Mixing step after linear input guess
+   iterative_orthogonalization         : No #     Iterative_orthogonalization for input guess orbitals
+   check_sumrho                        : 1 #      Enables linear sumrho check
+   check_overlap                       : 1 #      Enables linear overlap check
+   experimental_mode                   : No #     Activate the experimental mode in linear scaling
+   explicit_locregcenters              : No #     Linear scaling explicitly specify localization centers
+   calculate_KS_residue                : Yes #    Linear scaling calculate Kohn-Sham residue
+   intermediate_forces                 : No #     Linear scaling calculate intermediate forces
+   kappa_conv                          : 0.1 #    Exit kappa for extended input guess (experimental mode)
+   calculate_gap                       : No #     Linear scaling calculate the HOMO LUMO gap
+   loewdin_charge_analysis             : No #     Linear scaling perform a Loewdin charge analysis at the end of the calculation
+   coeff_weight_analysis               : No #     Linear scaling perform a Loewdin charge analysis of the coefficients for fragment 
+    #                                              calculations
+   check_matrix_compression            : Yes #    Linear scaling perform a check of the matrix compression routines
+   correction_co_contra                : Yes #    Linear scaling correction covariant / contravariant gradient
+   FOE_restart                         : 0 #      Restart method to be used for the FOE method
+   imethod_overlap                     : 1 #      Method to calculate the overlap matrices (1=old, 2=new)
+   enable_matrix_taskgroups            : True #   Enable the matrix taskgroups
+   hamapp_radius_incr                  : 8 #      Radius enlargement for the Hamiltonian application (in grid points)
+   adjust_kernel_iterations            : True #   Enable the adaptive ajustment of the number of kernel iterations
+   adjust_kernel_threshold             : True #   Enable the adaptive ajustment of the kernel convergence threshold according to the 
+    #                                              support function convergence
+   wf_extent_analysis                  : False #  Perform an analysis of the extent of the support functions (and possibly KS orbitals)
+   foe_gap                             : False #  Use the FOE method to calculate the HOMO-LUMO gap at the end of a calculation
+   calculate_forces                    : True #   Whether or not to calculate the forces at the end of a run (cubic and linear)
+ lin_general:
+   hybrid                              : No #     Activate the hybrid mode; if activated, only the low accuracy values will be relevant
+   nit: [100, 100] #                              Number of iteration with low/high accuracy
+   rpnrm_cv: [1.e-12, 1.e-12] #                   Convergence criterion for low/high accuracy
+   conf_damping                        : -0.5 #   How the confinement should be decreased, only relevant for hybrid mode; negative -> 
+    #                                              automatic
+   taylor_order                        : 0 #      Order of the Taylor approximation; 0 -> exact
+   max_inversion_error                 : 1.d0 #   Linear scaling maximal error of the Taylor approximations to calculate the inverse of 
+    #                                              the overlap matrix
+   output_wf                           : 0 #      Output basis functions; 0 no output, 1 formatted output, 2 Fortran bin, 3 ETSF
+   output_mat                          : 0
+   output_matder                       : 0
+   output_coeff                        : 0 #      Output KS coefficients; 0 no output, 1 formatted output
+   output_multipole_matrices           : True #   If outputting support function matrices, also output the multipole matrices in the 
+    #                                              same format as the other matrices
+   output_matmul                       : False #  If outputting support function matrices, also include the matmul file
+   output_fragments                    : 0 #      Output support functions, kernel and coeffs; 0 fragments and full system, 1 
+    #                                              fragments only, 2 full system only
+   kernel_restart_mode                 : 0 #      Method for restarting kernel; 0 kernel, 1 coefficients, 2 random, 3 diagonal, 4 
+    #                                              full kernel, 5 full coeffs
+   kernel_restart_noise                : 0.0d0 #  Add random noise to kernel or coefficients when restarting
+   frag_num_neighbours                 : 0 #      Number of neighbours to output for each fragment
+   frag_neighbour_cutoff               : 12.0d0 # Number of neighbours to output for each fragment
+   cdft_add_w_guess                    : 0.0 #    Add cdft_add_w_guess * W to kernel for CDFT initial guess
+   calc_dipole                         : No #     Calculate dipole
+   calc_quadrupole                     : No #     Calculate quadrupole
+   subspace_diag                       : No #     Diagonalization at the end
+   extra_states                        : 0 #      Number of extra states to include in support function and kernel optimization (dmin 
+    #                                              only), must be equal to norbsempty
+   calculate_onsite_overlap            : No #     Calculate the onsite overlap matrix (has only an effect if the matrices are all 
+    #                                              written to disk)
+   charge_multipoles                   : 0 #      Calculate the atom-centered multipole coefficients; 0 no, 1 old approach Loewdin, 2 
+    #                                              new approach Projector
+   check_multipoles                    : True #   Check the multipoles computed by computing the total dipole.
+   support_function_multipoles         : False #  Calculate the multipole moments of the support functions
+   plot_locreg_grids                   : False #  Plot the scaling function and wavelets grid of each localization region
+   calculate_FOE_eigenvalues: [0, -1] #           First and last eigenvalue to be calculated using the FOE procedure
+   precision_FOE_eigenvalues           : 5.e-3 #  Decay length of the error function used to extract the eigenvalues (i.e. something like 
+    #                                              the resolution)
+   multipole_centers                   : 0.0 #    Determines whether the multipole centers shall be determined automatically (i.e. 
+    #                                              taking the atoms) or whether they are 
+    #                                              provided manually
+   consider_entropy                    : False #  Indicate whether the entropy contribution to the total energy shall be considered
+ lin_basis:
+   nit: [4, 5] #                                  Maximal number of iterations in the optimization of the 
+    #                                              support functions
+   nit_ig                              : 50 #     maximal number of iterations to optimize the support functions in the extended input 
+    #                                              guess (experimental mode only)
+   extended_ig                         : No #     whether or not to do an extended input guess (will be activated by default in 
+    #                                              experimental mode)
+   orthogonalize_sfs                   : Yes #    whether or not to explicitly orthogonalize SFs (will be activated by default except 
+    #                                              in experimental mode, and may eventually be 
+    #                                              automatically turned off)
+   idsx: [6, 6] #                                 DIIS history for optimization of the support functions 
+    #                                              (low/high accuracy); 0 -> SD
+   gnrm_cv: [1.e-2, 1.e-4] #                      Convergence criterion for the optimization of the support functions 
+    #                                              (low/high accuracy)
+   gnrm_ig                             : 1.e-3 #  Convergence criterion for the optimization of the support functions in the extended 
+    #                                              input guess (experimental mode only)
+   deltae_cv                           : 1.e-4 #  Total relative energy difference to stop the optimization ('experimental_mode' only)
+   gnrm_dyn                            : 1.e-4 #  Dynamic convergence criterion ('experimental_mode' only)
+   min_gnrm_for_dynamic                : 1.e-3 #  Minimal gnrm to active the dynamic gnrm criterion
+   alpha_diis                          : 1.0 #    Multiplicator for DIIS
+   alpha_sd                            : 1.0 #    Initial step size for SD
+   nstep_prec                          : 5 #      Number of iterations in the preconditioner
+   fix_basis                           : 1.e-10 # Fix the support functions if the density change is below this threshold
+   correction_orthoconstraint          : 1 #      Correction for the slight non-orthonormality in the orthoconstraint
+   orthogonalize_ao                    : Yes #    Orthogonalize the atomic orbitals used as input guess
+   reset_DIIS_history                  : No #     Reset the DIIS history when starting the loop which optimizes the support functions
+ lin_kernel:
+   nstep: [1, 1] #                                Number of steps taken when updating the coefficients via 
+    #                                              direct minimization for each iteration of 
+    #                                              the density kernel loop
+   nit: [5, 5] #                                  Number of iterations in the (self-consistent) 
+    #                                              optimization of the density kernel
+   idsx_coeff: [0, 0] #                           DIIS history for direct mininimization - warning, there is 
+    #                                              currently a problem for idsx_coeff/=0
+   idsx: [0, 0] #                                 Mixing method; 0 -> linear mixing, >=1 -> Pulay mixing
+   alphamix: [0.5, 0.5] #                         Mixing parameter (low/high accuracy)
+   gnrm_cv_coeff: [1.e-5, 1.e-5] #                Convergence criterion on the gradient for direct minimization
+   rpnrm_cv: [1.e-10, 1.e-10] #                   Convergence criterion (change in density/potential) for the kernel 
+    #                                              optimization
+   linear_method                       : DIAG #   Method to optimize the density kernel
+   mixing_method                       : DEN #    Quantity to be mixed
+   alpha_sd_coeff                      : 0.2 #    Initial step size for SD for direct minimization
+   alpha_fit_coeff                     : No #     Update the SD step size by fitting a quadratic polynomial
+   coeff_scaling_factor                : 1.0 #    Factor to scale the gradient in direct minimization
+   delta_pnrm                          : -1.0 #   Stop the kernel optimization if the density/potential difference has decreased by this 
+    #                                              factor (deactivated if -1.0)
+   diag_start                          : No #     whether or not to diagonalize the SF Hamiltonian at the beginning of a restart 
+    #                                              calculation (useful for (pseudo-)fragment 
+    #                                              calculations)
+ lin_basis_params:
+   nbasis                              : 4 #      Number of support functions per atom
+   ao_confinement                      : 8.3e-3 # Prefactor for the input guess confining potential
+   confinement: [8.3e-3, 0.0] #                   Prefactor for the confining potential (low/high accuracy)
+   rloc: [7.0, 7.0] #                             Localization radius for the support functions
+   rloc_kernel                         : 9.0 #    Localization radius for the density kernel
+   rloc_kernel_foe                     : 14.0 #   Cutoff radius for the FOE matrix vector multiplications
+ posinp:
+    #----------------------------------------- Atomic positions (by default angstroem units)
+   units                               : angstroem
+   positions:
+   - Al: [4.237730506886604, 2.596071416343018, 3.441680169763167]
+   - Al: [2.087000396037179, 4.146194574701071, 3.244429792780851]
+   - Al: [4.446315610984967, 5.355543770333702, 3.048061732621026]
+   - Al: [2.241143979014973, 6.182385506798656, 1.542234389903993]
+   - Al: [-6.3657684378064974E-002, 5.696411824596125, 3.047308653344979]
+   - Al: [-0.2722497084763826, 2.936811546813634, 3.441054108135364]
+   - Al: [2.270453188492208, 6.575030780476376, 4.309628662672898]
+   - Al: [1.932885791229573, 2.109965773966694, 4.946630579730976]
+   - Al: [0.7170070142898021, 4.569195715798308, 5.483123017742646]
+   - Al: [3.457010930518208, 3.723329635656485, 1.00578793959238]
+   - Al: [0.6695904638475196, 3.933864040983461, 1.005442802216365]
+   - Al: [3.504232025504483, 4.35845965656172, 5.483629317252834]
+   - Al: [1.903705875690897, 1.717405868823803, 2.179214622206656]
+   properties:
+     format                            : xyz
+     source                            : Al13m1_min0001_h045_r6-8.xyz
+  #--------------------------------------------------------------------------------------- |
+ Data Writing directory                : ./
+  #-------------------------------- Input Atomic System (file: Al13m1_min0001_h045_r6-8.xyz)
+ Atomic System Properties:
+   Number of atomic types              :  1
+   Number of atoms                     :  13
+   Types of atoms                      :  [ Al ]
+   Boundary Conditions                 : Free #Code: F
+   Number of Symmetries                :  0
+   Space group                         : disabled
+  #-------------------------------------------------- Geometry optimization Input Parameters
+ Geometry Optimization Parameters:
+   Maximum steps                       :  1
+   Algorithm                           : none
+   Random atomic displacement          :  0.0E+00
+   Fluctuation in forces               :  1.0E+00
+   Maximum in forces                   :  0.0E+00
+   Steepest descent step               :  4.0E+00
+ Material acceleration                 :  No #iproc=0
+  #------------------------------------------------------------------------ Input parameters
+ DFT parameters:
+   eXchange Correlation:
+     XC ID                             :  &ixc -101130
+     Exchange-Correlation reference    : "XC= Perdew, Burke & Ernzerhof"
+     XC functional implementation      : libXC
+     Reference Papers:
+     - "Comput. Phys. Commun. 183, 2272 (2012)"
+     - "J. P. Perdew, K. Burke, and M. Ernzerhof, Phys. Rev. Lett. 77, 3865 (1996)"
+     - "J. P. Perdew, K. Burke, and M. Ernzerhof, Phys. Rev. Lett. 78, 1396 (1997)"
+     - "J. P. Perdew, K. Burke, and M. Ernzerhof, Phys. Rev. Lett. 77, 3865 (1996)"
+     - "J. P. Perdew, K. Burke, and M. Ernzerhof, Phys. Rev. Lett. 78, 1396 (1997)"
+     Spin polarization                 :  No
+   Net Charge (Ions-Electrons)         : -1.00000
+ Basis set definition:
+   Suggested Grid Spacings (a0)        :  [  0.45,  0.45,  0.45 ]
+   Coarse and Fine Radii Multipliers   :  [  6.0,  8.0 ]
+ Self-Consistent Cycle Parameters:
+   Wavefunction:
+     Gradient Norm Threshold           :  &gnrm_cv  1.0E-05
+     CG Steps for Preconditioner       :  6
+     DIIS History length               :  6
+     Max. Wfn Iterations               :  &itermax  100
+     Max. Subspace Diagonalizations    :  3
+     Input wavefunction policy         : INPUT_PSI_LCAO # 0
+     Output wavefunction policy        : NONE # 0
+     Output grid policy                : NONE # 0
+     Virtual orbitals                  :  8
+     Number of plotted density orbitals:  0
+   Density/Potential:
+     Max. Iterations                   :  1
+ Post Optimization Parameters:
+   Finite-Size Effect estimation:
+     Scheduled                         :  No
+  #----------------------------------------------------------------------- System Properties
+ Properties of atoms in the system:
+ - Symbol                              : Al #Type No.  01
+   No. of Electrons                    :  3
+   No. of Atoms                        :  13
+   Radii of active regions (AU):
+     Coarse                            :  2.20815
+     Fine                              :  0.45122
+     Coarse PSP                        :  1.00776
+     Source                            : PSP File
+   Grid Spacing threshold (AU)         :  1.13
+   Pseudopotential type                : HGH-K + NLCC
+   Local Pseudo Potential (HGH convention):
+     Rloc                              :  0.60224
+     Coefficients (c1 .. c4)           :  [ -5.18802,  0.69616,  0.00000,  0.00000 ]
+   Non Linear Core Correction term:
+     Rcore                             :  0.43029
+     Core charge                       :  35.88749
+   NonLocal PSP Parameters:
+   - Channel (l)                       :  0
+     Rloc                              :  0.45122
+     h_ij matrix:
+     -  [  6.17503, -1.91494,  0.00000 ]
+     -  [ -1.91494,  3.68229,  0.00000 ]
+     -  [  0.00000,  0.00000,  0.00000 ]
+   - Channel (l)                       :  1
+     Rloc                              :  0.53747
+     h_ij matrix:
+     -  [  2.27296,  0.00000,  0.00000 ]
+     -  [  0.00000,  0.00000,  0.00000 ]
+     -  [  0.00000,  0.00000,  0.00000 ]
+   No. of projectors                   :  5
+   PSP XC                              : "XC= Perdew, Burke & Ernzerhof"
+  #----------------------------------------------- Atom Positions (specified and grid units)
+ Atomic structure:
+   units                               : angstroem
+   positions:
+   - Al: [ 11.43775761,  7.855978016,  9.365139289] # [  48.03,  32.99,  39.33 ] 0001
+   - Al: [ 9.287027496,  9.406101174,  9.167888912] # [  39.00,  39.50,  38.50 ] 0002
+   - Al: [ 11.64634271,  10.61545037,  8.971520852] # [  48.91,  44.58,  37.67 ] 0003
+   - Al: [ 9.441171079,  11.44229211,  7.465693509] # [  39.65,  48.05,  31.35 ] 0004
+   - Al: [ 7.136369416,  10.95631842,  8.970767773] # [  29.97,  46.01,  37.67 ] 0005
+   - Al: [ 6.927777392,  8.196718146,  9.364513228] # [  29.09,  34.42,  39.33 ] 0006
+   - Al: [ 9.470480289,  11.83493738,  10.23308778] # [  39.77,  49.70,  42.97 ] 0007
+   - Al: [ 9.132912892,  7.369872373,  10.87008970] # [  38.35,  30.95,  45.65 ] 0008
+   - Al: [ 7.917034115,  9.829102315,  11.40658214] # [  33.25,  41.28,  47.90 ] 0009
+   - Al: [ 10.65703803,  8.983236235,  6.929247059] # [  44.75,  37.72,  29.10 ] 0010
+   - Al: [ 7.869617564,  9.193770640,  6.928901922] # [  33.05,  38.61,  29.10 ] 0011
+   - Al: [ 10.70425913,  9.618366256,  11.40708844] # [  44.95,  40.39,  47.90 ] 0012
+   - Al: [ 9.103732976,  6.977312468,  8.102673742] # [  38.23,  29.30,  34.03 ] 0013
+   position offset                     :  [ -13.606, -9.9398, -11.194 ]
+   Rigid Shift Applied (AU)            :  [  13.606,  9.9398,  11.194 ]
+  #------------------------------------------------------------------------- Grid properties
+ Box Grid spacings                     :  [  0.4500,  0.4500,  0.4500 ]
+ Sizes of the simulation domain:
+   AU                                  :  [  35.100,  35.550,  34.650 ]
+   Angstroem                           :  [  18.574,  18.812,  18.336 ]
+   Grid Spacing Units                  :  [  78,  79,  77 ]
+   High resolution region boundaries (GU):
+     From                              :  [  22,  22,  22 ]
+     To                                :  [  56,  57,  55 ]
+ High Res. box is treated separately   :  Yes
+ Wavefunctions Descriptors, full simulation domain:
+   Coarse resolution grid:
+     No. of segments                   :  4938
+     No. of points                     :  255121
+   Fine resolution grid:
+     No. of segments                   :  1052
+     No. of points                     :  20418
+  #------------------------------------------------------------------- Kernel Initialization
+ Poisson Kernel Initialization:
+    #---------------------------------------------------------------------- Input parameters
+   kernel:
+     screening                         : 0 #      Mu screening parameter
+     isf_order                         : 16 #     Order of the Interpolating Scaling Function family
+     stress_tensor                     : Yes #    Triggers the calculation of the stress tensor
+   environment:
+     cavity                            : none #   Type of the cavity
+     fd_order                          : 16 #     Order of the Finite-difference derivatives for the GPS solver
+     itermax                           : 200 #    Maximum number of iterations of the GPS outer loop
+     minres                            : 1.e-8 #  Convergence threshold of the loop
+     pb_method                         : none #   Defines the method for the Poisson Boltzmann Equation
+   setup:
+     accel                             : none #   Material Acceleration
+     taskgroup_size                    : 0 #      Size of the taskgroups of the Poisson Solver
+     global_data                       : No #     Charge density and Electrostatic potential are given by global arrays
+     verbose                           : Yes #    Verbosity switch
+     output                            : none #   Quantities to be plotted after the main solver routine
+   MPI tasks                           :  10
+   OpenMP threads per MPI task         :  3
+ Poisson Kernel Creation:
+   Boundary Conditions                 : Free
+   Memory Requirements per MPI task:
+     Density (MB)                      :  5.26
+     Kernel (MB)                       :  5.51
+     Full Grid Arrays (MB)             :  49.88
+     Load Balancing of calculations:
+       Density:
+         MPI tasks 0- 8                : 100%
+         MPI task  9                   :  95%
+       Kernel:
+         MPI tasks 0- 8                : 100%
+         MPI task 9                    :  65%
+       Complete LB per task            : 1/3 LB_density + 2/3 LB_kernel
+   Device acceleration setup:
+     MODEL_NONE                        :  0
+     Attributes:
+       DEVICE                          :  1
+  #------------------------------------------------------- Electronic Orbital Initialization
+ Total Number of Electrons             :  40
+ Spin treatment                        : Averaged
+ Orbitals Repartition:
+   MPI tasks  0- 9                     :  2
+ Total Number of Orbitals              :  20
+ Input Occupation Numbers:
+ - Occupation Numbers: {Orbitals No. 1-20:  2.0000}
+ Wavefunctions memory occupation for root MPI process:  6 MB 75 KB 544 B
+ NonLocal PSP Projectors Descriptors:
+   Creation strategy                   : On-the-fly
+   Total number of projectors          :  65
+   Total number of components          :  196150
+   Percent of zero components          :  27
+   Size of workspaces                  :  157000
+   Maximum size of masking arrays for a projector:  3684
+   Cumulative size of masking arrays   :  47190
+ NLCC, Calculate core density for atom : Al
+ Analytic core charges for atom species:
+   Al                                  :  46.5834576
+ Total core charge                     :  46.5834576
+ Total core charge on the grid         :  46.5834576 #To be compared with analytic one
+ Communication checks:
+   Transpositions                      :  Yes
+   Reverse transpositions              :  Yes
+  #-------------------------------------------------------- Estimation of Memory Consumption
+ Memory requirements for principal quantities (MiB.KiB):
+   Subspace Matrix                     : 0.1 #    (Number of Orbitals: 20)
+   Single orbital                      : 3.38 #   (Number of Components: 398047)
+   All (distributed) orbitals          : 18.227 # (Number of Orbitals per MPI task: 2)
+   Wavefunction storage size           : 91.109 # (DIIS/SD workspaces included)
+   Nonlocal Pseudopotential Arrays     : 1.509
+   Full Uncompressed (ISF) grid        : 49.906
+   Workspaces storage size             : 5.394
+ Accumulated memory requirements during principal run stages (MiB.KiB):
+   Kernel calculation                  : 104.676
+   Density Construction                : 249.722
+   Poisson Solver                      : 161.241
+   Hamiltonian application             : 256.752
+   Orbitals Orthonormalization         : 256.752
+ Estimated Memory Peak (MB)            :  256
+ Value for Exc[rhoc]                   : -36.38615295836939
+ Ion-Ion interaction energy            :  1.09576778592313E+02
+  #---------------------------------------------------------------- Ionic Potential Creation
+ Total ionic charge                    : -38.999999999998
+ Poisson Solver:
+   BC                                  : Free
+   Box                                 :  [  187,  189,  185 ]
+   MPI tasks                           :  10
+ Interaction energy ions multipoles    :  0.0
+ Interaction energy multipoles multipoles:  0.0
+  #----------------------------------- Wavefunctions from PSP Atomic Orbitals Initialization
+ Input Hamiltonian:
+   Policy                              : Wavefunctions from PSP Atomic Orbitals
+   Total No. of Atomic Input Orbitals  :  52
+    #WARNING: A bigger number of virtual orbitals may be needed for better convergence
+   Suggested nvirt                     :  52
+   Inputguess Orbitals Repartition:
+     Minimum                           :  5
+     Maximum                           :  6
+     Average                           :  5.2
+   Atomic Input Orbital Generation:
+   -  {Atom Type: Al, Electronic configuration: {
+ s: [ 2.00], 
+ p: [ 1/3,  1/3,  1/3]}}
+   Wavelet conversion succeeded        :  Yes
+   Deviation from normalization        :  8.42E-07
+   GPU acceleration                    :  No
+   Rho Commun                          : ALLRED
+   Total electronic charge             :  38.999999999394
+   Poisson Solver:
+     BC                                : Free
+     Box                               :  [  187,  189,  185 ]
+     MPI tasks                         :  10
+   Expected kinetic energy             :  9.0728681683
+   Energies: {Ekin:  9.07289707502E+00, Epot: -2.91911687682E+01, Enl:  5.84886390088E+00, 
+                EH:  1.25516514157E+02,  EXC: -4.64836417971E+01, EvXC: -1.26363301456E+01}
+   EKS                                 : -6.40564550082542041E+01
+   Input Guess Overlap Matrices: {Calculated:  Yes, Diagonalized:  Yes}
+    #Eigenvalues and New Occupation Numbers
+   Orbitals: [
+ {e: -6.047243576011E-01, f:  2.0000},  # 00001
+ {e: -5.007444744853E-01, f:  2.0000},  # 00002
+ {e: -5.007412143589E-01, f:  2.0000},  # 00003
+ {e: -5.007408032740E-01, f:  2.0000},  # 00004
+ {e: -3.640151174759E-01, f:  2.0000},  # 00005
+ {e: -3.640134983466E-01, f:  2.0000},  # 00006
+ {e: -3.640125696018E-01, f:  2.0000},  # 00007
+ {e: -3.640105495635E-01, f:  2.0000},  # 00008
+ {e: -3.640095419646E-01, f:  2.0000},  # 00009
+ {e: -3.263241501365E-01, f:  2.0000},  # 00010
+ {e: -2.365215032582E-01, f:  2.0000},  # 00011
+ {e: -2.365204739678E-01, f:  2.0000},  # 00012
+ {e: -2.365195631527E-01, f:  2.0000},  # 00013
+ {e: -2.341510158308E-01, f:  2.0000},  # 00014
+ {e: -2.341502927891E-01, f:  2.0000},  # 00015
+ {e: -2.341499623701E-01, f:  2.0000},  # 00016
+ {e: -2.341496744274E-01, f:  2.0000},  # 00017
+ {e: -2.301038519807E-01, f:  2.0000},  # 00018
+ {e: -2.301024618483E-01, f:  2.0000},  # 00019
+ {e: -2.301015337675E-01, f:  2.0000},  # 00020
+ {e: -1.436952765880E-01, f:  0.0000},  # 00021
+ {e: -1.436945780360E-01, f:  0.0000},  # 00022
+ {e: -1.436929039659E-01, f:  0.0000},  # 00023
+ {e: -1.436902849417E-01, f:  0.0000},  # 00024
+ {e: -1.436889032021E-01, f:  0.0000},  # 00025
+ {e: -9.273303531045E-02, f:  0.0000},  # 00026
+ {e: -9.273256909280E-02, f:  0.0000},  # 00027
+ {e: -9.273208478204E-02, f:  0.0000},  # 00028
+ {e: -9.273141869628E-02, f:  0.0000},  # 00029
+ {e: -2.911851586352E-02, f:  0.0000},  # 00030
+ {e: -2.911315430557E-02, f:  0.0000},  # 00031
+ {e: -2.911078499473E-02, f:  0.0000},  # 00032
+ {e: -2.910934687438E-02, f:  0.0000},  # 00033
+ {e: -2.910744245041E-02, f:  0.0000},  # 00034
+ {e: -8.438085620454E-03, f:  0.0000},  # 00035
+ {e: -8.437131938245E-03, f:  0.0000},  # 00036
+ {e: -8.435907371577E-03, f:  0.0000},  # 00037
+ {e: -4.005831512950E-04, f:  0.0000},  # 00038
+ {e:  1.721972865207E-02, f:  0.0000},  # 00039
+ {e:  1.722024407407E-02, f:  0.0000},  # 00040
+ {e:  1.722125062239E-02, f:  0.0000},  # 00041
+ {e:  1.722210643680E-02, f:  0.0000},  # 00042
+ {e:  1.722284099205E-02, f:  0.0000},  # 00043
+ {e:  1.835896951936E-02, f:  0.0000},  # 00044
+ {e:  1.836260156854E-02, f:  0.0000},  # 00045
+ {e:  1.836742043531E-02, f:  0.0000},  # 00046
+ {e:  1.290685776871E-01, f:  0.0000},  # 00047
+ {e:  1.290699432109E-01, f:  0.0000},  # 00048
+ {e:  1.290700420448E-01, f:  0.0000},  # 00049
+ {e:  1.749818833926E-01, f:  0.0000},  # 00050
+ {e:  1.749850188980E-01, f:  0.0000},  # 00051
+ {e:  1.749864080869E-01, f:  0.0000}] # 00052
+   IG wavefunctions defined            :  Yes
+   Accuracy estimation for this run:
+     Energy                            :  2.89E-05
+     Convergence Criterion             :  1.45E-06
+  #------------------------------------------------------------------- Self-Consistent Cycle
+ Ground State Optimization:
+ - Hamiltonian Optimization: &itrp001
+   - Subspace Optimization: &itrep001-01
+       Wavefunctions Iterations:
+       -  { #---------------------------------------------------------------------- iter: 1
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999999430, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.06549462393E+01, Epot: -2.20468919804E+01, Enl:  5.05414825846E+00, 
+              EH:  1.32340633116E+02,  EXC: -4.66639012215E+01, EvXC: -1.29135889614E+01}, 
+ iter:  1, EKS: -6.28519642660178590E+01, gnrm:  1.25E-01, D:  1.20E+00, 
+ DIIS weights: [ 1.00E+00,  1.00E+00], Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 2
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999996399, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03464290890E+01, Epot: -2.19899994785E+01, Enl:  5.50545476895E+00, 
+              EH:  1.32882726974E+02,  EXC: -4.67645633332E+01, EvXC: -1.30171380932E+01}, 
+ iter:  2, EKS: -6.31914892418436622E+01, gnrm:  5.10E-02, D: -3.40E-01, 
+ DIIS weights: [-2.10E-01,  1.21E+00, -1.67E-02], Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 3
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998146, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03616515813E+01, Epot: -2.19421527453E+01, Enl:  5.30593728117E+00, 
+              EH:  1.32836304715E+02,  EXC: -4.67629381826E+01, EvXC: -1.30211592649E+01}, 
+ iter:  3, EKS: -6.32758689229436797E+01, gnrm:  2.82E-02, D: -8.44E-02, 
+ DIIS weights: [-7.45E-02, -6.08E-01,  1.68E+00, -1.75E-03], Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 4
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998292, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03996316716E+01, Epot: -2.17761367310E+01, Enl:  5.29167658812E+00, 
+              EH:  1.33062387218E+02,  EXC: -4.67890686122E+01, EvXC: -1.30525410325E+01}, 
+ iter:  4, EKS: -6.33069646767574099E+01, gnrm:  1.30E-02, D: -3.11E-02, 
+ DIIS weights: [ 2.46E-02, -9.06E-02, -8.86E-02,  1.15E+00, -4.30E-04], 
+     Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 5
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998563, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03896061948E+01, Epot: -2.18494710751E+01, Enl:  5.25753320507E+00, 
+              EH:  1.32946442280E+02,  EXC: -4.67806018323E+01, EvXC: -1.30426760120E+01}, 
+ iter:  5, EKS: -6.33099211834888180E+01, gnrm:  5.17E-03, D: -2.96E-03, 
+ DIIS weights: [ 1.06E-02,  1.61E-01, -3.85E-01, -3.37E-01,  1.55E+00, -7.38E-05], 
+     Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 6
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998546, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03913950171E+01, Epot: -2.18374465270E+01, Enl:  5.25333668007E+00, 
+              EH:  1.32957289615E+02,  EXC: -4.67814259542E+01, EvXC: -1.30437735603E+01}, 
+ iter:  6, EKS: -6.33108782464774009E+01, gnrm:  3.06E-03, D: -9.57E-04, 
+ DIIS weights: [-8.40E-03, -4.82E-02,  1.59E-01,  6.12E-02, -8.05E-01,  1.64E+00, 
+                -1.46E-05],           Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 7
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998555, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03946820624E+01, Epot: -2.18420307269E+01, Enl:  5.25599727035E+00, 
+              EH:  1.32958983025E+02,  EXC: -4.67824456903E+01, EvXC: -1.30449504485E+01}, 
+ iter:  7, EKS: -6.33110510690436854E+01, gnrm:  1.46E-03, D: -1.73E-04, 
+ DIIS weights: [-5.22E-03,  4.68E-03,  4.50E-02, -4.76E-02, -4.96E-01,  1.50E+00, 
+                -2.29E-06],           Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 8
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998566, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03970837385E+01, Epot: -2.18433605769E+01, Enl:  5.25806755207E+00, 
+              EH:  1.32962307698E+02,  EXC: -4.67832497530E+01, EvXC: -1.30459013373E+01}, 
+ iter:  8, EKS: -6.33110868075389419E+01, gnrm:  5.50E-04, D: -3.57E-05, 
+ DIIS weights: [-9.69E-04, -1.23E-02,  5.51E-02,  6.69E-03, -5.20E-01,  1.47E+00, 
+                -6.17E-07],           Orthogonalization Method:  0}
+       -  { #---------------------------------------------------------------------- iter: 9
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03976120966E+01, Epot: -2.18452458184E+01, Enl:  5.25920978005E+00, 
+              EH:  1.32962131834E+02,  EXC: -4.67835074082E+01, EvXC: -1.30461914512E+01}, 
+ iter:  9, EKS: -6.33110931407556379E+01, gnrm:  2.34E-04, D: -6.33E-06, 
+ DIIS weights: [-4.00E-03, -1.76E-03,  1.12E-01, -2.70E-01, -2.26E-01,  1.39E+00, 
+                -1.77E-07],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 10
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998571, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03977064092E+01, Epot: -2.18465404523E+01, Enl:  5.25957061692E+00, 
+              EH:  1.32961295767E+02,  EXC: -4.67835537372E+01, EvXC: -1.30462396741E+01}, 
+ iter:  10, EKS: -6.33110946639329200E+01, gnrm:  1.20E-04, D: -1.52E-06, 
+ DIIS weights: [-2.96E-03, -1.85E-02,  1.26E-01, -2.45E-01, -2.05E-01,  1.35E+00, 
+                -6.03E-08],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 11
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998571, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03977802435E+01, Epot: -2.18465495306E+01, Enl:  5.25981170167E+00, 
+              EH:  1.32961607379E+02,  EXC: -4.67836053355E+01, EvXC: -1.30462966253E+01}, 
+ iter:  11, EKS: -6.33110950821210707E+01, gnrm:  7.37E-05, D: -4.18E-07, 
+ DIIS weights: [-1.30E-02,  2.84E-02,  1.00E-01, -2.85E-01, -3.68E-01,  1.54E+00, 
+                -2.31E-08],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 12
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03977947592E+01, Epot: -2.18468741212E+01, Enl:  5.25984882187E+00, 
+              EH:  1.32961328636E+02,  EXC: -4.67835959440E+01, EvXC: -1.30462812575E+01}, 
+ iter:  12, EKS: -6.33110952704769403E+01, gnrm:  3.99E-05, D: -1.88E-07, 
+ DIIS weights: [-7.37E-03, -1.81E-02,  1.39E-01, -1.10E-01, -7.70E-01,  1.77E+00, 
+                -1.09E-08],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 13
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03978566285E+01, Epot: -2.18467677686E+01, Enl:  5.25992502954E+00, 
+              EH:  1.32961574993E+02,  EXC: -4.67836184865E+01, EvXC: -1.30463056358E+01}, 
+ iter:  13, EKS: -6.33110953617063288E+01, gnrm:  2.78E-05, D: -9.12E-08, 
+ DIIS weights: [-2.32E-02,  4.10E-02,  1.90E-01, -3.40E-01, -6.80E-01,  1.81E+00, 
+                -4.50E-09],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 14
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03978631978E+01, Epot: -2.18468434792E+01, Enl:  5.25990355809E+00, 
+              EH:  1.32961482290E+02,  EXC: -4.67836099373E+01, EvXC: -1.30462949487E+01}, 
+ iter:  14, EKS: -6.33110954098844942E+01, gnrm:  2.10E-05, D: -4.82E-08, 
+ DIIS weights: [-2.15E-02,  2.25E-02,  1.48E-01, -1.97E-01, -6.16E-01,  1.66E+00, 
+                -1.95E-09],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 15
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03978579318E+01, Epot: -2.18467862003E+01, Enl:  5.25991395268E+00, 
+              EH:  1.32961545364E+02,  EXC: -4.67836124579E+01, EvXC: -1.30462981150E+01}, 
+ iter:  15, EKS: -6.33110954306870113E+01, gnrm:  1.39E-05, D: -2.08E-08, 
+ DIIS weights: [-4.76E-02, -3.36E-05,  4.14E-01, -5.72E-01, -6.02E-01,  1.81E+00, 
+                -7.73E-10],           Orthogonalization Method:  0}
+       -  { #--------------------------------------------------------------------- iter: 16
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.03978360746E+01, Epot: -2.18467941648E+01, Enl:  5.25989869869E+00, 
+              EH:  1.32961499886E+02,  EXC: -4.67836063735E+01, EvXC: -1.30462916182E+01}, 
+ iter:  16, EKS: -6.33110954404258166E+01, gnrm:  9.44E-06, D: -9.74E-09, 
+ DIIS weights: [-2.09E-02,  5.84E-03,  1.61E-01, -1.93E-01, -5.41E-01,  1.59E+00, 
+                -3.23E-10],           Orthogonalization Method:  0}
+       -  &FINAL001  { #---------------------------------------------------------- iter: 17
+ GPU acceleration:  No, Rho Commun: ALLRED, Total electronic charge:  39.999999998570, 
+ Poisson Solver: {BC: Free, Box:  [  187,  189,  185 ], MPI tasks:  10}, 
+ Hamiltonian Applied:  Yes, 
+ iter:  17, EKS: -6.33110954435966846E+01, gnrm:  9.44E-06, D: -3.17E-09,  #FINAL
+ Energies: {Ekin:  1.03978256335E+01, Epot: -2.18467900447E+01, Enl:  5.25989575268E+00, 
+              EH:  1.32961490534E+02,  EXC: -4.67836047160E+01, EvXC: -1.30462898729E+01, 
+            Eion:  1.09576778592E+02,                     Exc(rhoc): -3.63861529584E+01}, 
+ }
+       Non-Hermiticity of Hamiltonian in the Subspace:  1.39E-32
+        #Eigenvalues and New Occupation Numbers
+       Orbitals: [
+ {e: -3.855895726071E-01, f:  2.0000},  # 00001
+ {e: -2.934119635409E-01, f:  2.0000},  # 00002
+ {e: -2.934102084967E-01, f:  2.0000},  # 00003
+ {e: -2.934095039144E-01, f:  2.0000},  # 00004
+ {e: -1.850066791081E-01, f:  2.0000},  # 00005
+ {e: -1.850051296822E-01, f:  2.0000},  # 00006
+ {e: -1.850046256469E-01, f:  2.0000},  # 00007
+ {e: -1.850028258270E-01, f:  2.0000},  # 00008
+ {e: -1.850025075590E-01, f:  2.0000},  # 00009
+ {e: -1.547056614287E-01, f:  2.0000},  # 00010
+ {e: -8.165457877648E-02, f:  2.0000},  # 00011
+ {e: -8.165380566130E-02, f:  2.0000},  # 00012
+ {e: -8.165343090075E-02, f:  2.0000},  # 00013
+ {e: -7.323335919163E-02, f:  2.0000},  # 00014
+ {e: -7.323233820967E-02, f:  2.0000},  # 00015
+ {e: -7.323189952382E-02, f:  2.0000},  # 00016
+ {e: -7.108323266721E-02, f:  2.0000},  # 00017
+ {e: -7.108136710181E-02, f:  2.0000},  # 00018
+ {e: -7.108124532356E-02, f:  2.0000},  # 00019
+ {e: -7.108039410080E-02, f:  2.0000}] # 00020
+ Last Iteration                        : *FINAL001
+  #---------------------------------------------------------------------- Forces Calculation
+ GPU acceleration                      :  No
+ Rho Commun                            : RED_SCT
+ Total electronic charge               :  39.999999998570
+ Poisson Solver:
+   BC                                  : Free
+   Box                                 :  [  187,  189,  185 ]
+   MPI tasks                           :  10
+ Multipole analysis origin             :  [  1.754996E+01,  1.777498E+01,  1.732489E+01 ]
+ Electric Dipole Moment (AU):
+   P vector                            :  [ -3.443493E-04, -3.250907E-04, -3.277078E-04 ]
+   norm(P)                             :  5.75893031E-04
+ Electric Dipole Moment (Debye):
+   P vector                            :  [ -8.752484E-04, -8.262981E-04, -8.329501E-04 ]
+   norm(P)                             :  1.46377394E-03
+ Quadrupole Moment (AU):
+   Q matrix:
+   -  [ 1.2836E-04, -1.4820E-05,  3.7006E-04]
+   -  [-1.4820E-05, -1.2437E-04,  1.6598E-04]
+   -  [ 3.7006E-04,  1.6598E-04, -3.9866E-06]
+   trace                               :  2.27E-13
+ Spreads of the electronic density (AU):  [  3.281728E+00,  3.281731E+00,  3.281730E+00 ]
+ Calculate local forces                :  Yes
+ Calculate NLCC forces                 :  Yes
+ Calculate Non Local forces            :  Yes
+  #---------------------------------- Iterative subspace diagonalization of virtual orbitals
+ Generation of input wavefunction data for atom: Al
+ Electronic configuration: {
+ s: [ 2.00], 
+ p: [ 1/3,  1/3,  1/3]}
+ Wavelet conversion succeeded          :  Yes
+ Deviation from normalization          :  2.61E+00
+ L2 Norm - 1 and Rayleigh quotient (Davidson):
+    #Kpt #0001  BZ coord. =  [  0.000000,  0.000000,  0.000000 ]
+ -  [ -2.220446E-16,  1.150575E-01 ] # 0001
+ -  [  6.661338E-16,  9.434856E-02 ] # 0002
+ -  [  3.330669E-16,  1.006371E-01 ] # 0003
+ -  [  2.220446E-16,  1.071118E-01 ] # 0004
+ -  [  1.554312E-15,  2.832118E-01 ] # 0005
+ -  [  1.332268E-15,  2.014988E-01 ] # 0006
+ -  [  2.220446E-16,  1.028700E-01 ] # 0007
+ -  [  2.220446E-16,  1.296902E-01 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  1
+ Gradient Norm: {Value:  4.64591E-01, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [  2.4562E-02,  5.2634E+00 ] # 0001
+ -  [  2.8991E-02,  3.2452E+00 ] # 0002
+ -  [  3.4478E-02,  3.0550E+00 ] # 0003
+ -  [  4.0207E-02,  3.0605E+00 ] # 0004
+ -  [  6.4956E-02,  7.9462E+00 ] # 0005
+ -  [  1.056E-01,  4.7238E+00 ] # 0006
+ -  [  1.2695E-01,  3.7357E+00 ] # 0007
+ -  [  1.5438E-01,  4.0410E+00 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  2
+ Gradient Norm: {Value:  2.30344E-01, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [  1.1167E-02,  2.0580E+00 ] # 0001
+ -  [  1.3183E-02,  2.2888E+00 ] # 0002
+ -  [  1.8223E-02,  1.7888E+00 ] # 0003
+ -  [  2.3643E-02,  2.1314E+00 ] # 0004
+ -  [  4.2551E-02,  2.5413E+00 ] # 0005
+ -  [  7.979E-02,  2.6210E+00 ] # 0006
+ -  [  1.0172E-01,  2.1347E+00 ] # 0007
+ -  [  1.1705E-01,  2.7101E+00 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  3
+ Gradient Norm: {Value:  1.83532E-01, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [  5.2708E-03,  1.2560E+00 ] # 0001
+ -  [  6.1903E-03,  1.3733E+00 ] # 0002
+ -  [  1.0828E-02,  1.3873E+00 ] # 0003
+ -  [  1.4703E-02,  1.5345E+00 ] # 0004
+ -  [  2.9864E-02,  1.8899E+00 ] # 0005
+ -  [  6.814E-02,  2.0154E+00 ] # 0006
+ -  [  8.7396E-02,  2.0992E+00 ] # 0007
+ -  [  9.8345E-02,  2.6766E+00 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  4
+ Gradient Norm: {Value:  1.27512E-01, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [  2.2575E-03,  1.0411E+00 ] # 0001
+ -  [  2.7262E-03,  1.0121E+00 ] # 0002
+ -  [  6.5844E-03,  9.2485E-01 ] # 0003
+ -  [  8.9966E-03,  1.2002E+00 ] # 0004
+ -  [  2.1503E-02,  1.6175E+00 ] # 0005
+ -  [  6.176E-02,  1.2575E+00 ] # 0006
+ -  [  7.7539E-02,  1.3930E+00 ] # 0007
+ -  [  8.6587E-02,  1.5701E+00 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  5
+ Gradient Norm: {Value:  1.08490E-01, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [  6.6159E-04,  6.4563E-01 ] # 0001
+ -  [  8.9157E-04,  6.6807E-01 ] # 0002
+ -  [  3.9376E-03,  7.6206E-01 ] # 0003
+ -  [  5.3571E-03,  9.5109E-01 ] # 0004
+ -  [  1.5715E-02,  1.2414E+00 ] # 0005
+ -  [  5.805E-02,  1.0625E+00 ] # 0006
+ -  [  7.0641E-02,  1.4458E+00 ] # 0007
+ -  [  7.884E-02,  1.5190E+00 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  6
+ Gradient Norm: {Value:  7.99538E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -2.4805E-04,  5.3953E-01 ] # 0001
+ -  [ -1.2102E-04,  5.1832E-01 ] # 0002
+ -  [  2.187E-03,  5.6398E-01 ] # 0003
+ -  [  2.9829E-03,  7.4542E-01 ] # 0004
+ -  [  1.1472E-02,  1.0888E+00 ] # 0005
+ -  [  5.5697E-02,  7.3313E-01 ] # 0006
+ -  [  6.5813E-02,  9.9262E-01 ] # 0007
+ -  [  7.3645E-02,  9.8610E-01 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  7
+ Gradient Norm: {Value:  7.13080E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -7.8307E-04,  3.4764E-01 ] # 0001
+ -  [ -7.0297E-04,  3.7613E-01 ] # 0002
+ -  [  9.9985E-04,  4.9956E-01 ] # 0003
+ -  [  1.4662E-03,  6.0492E-01 ] # 0004
+ -  [  8.3422E-03,  8.7529E-01 ] # 0005
+ -  [  5.4158E-02,  6.6377E-01 ] # 0006
+ -  [  6.2414E-02,  1.0065E+00 ] # 0007
+ -  [  6.9973E-02,  9.8504E-01 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  8
+ Gradient Norm: {Value:  5.47715E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.1155E-03,  2.9006E-01 ] # 0001
+ -  [ -1.0461E-03,  3.1944E-01 ] # 0002
+ -  [  1.8106E-04,  3.8434E-01 ] # 0003
+ -  [  4.6613E-04,  4.6949E-01 ] # 0004
+ -  [  5.9493E-03,  7.9496E-01 ] # 0005
+ -  [  5.3093E-02,  4.8721E-01 ] # 0006
+ -  [  6.0025E-02,  7.0056E-01 ] # 0007
+ -  [  6.7338E-02,  6.9678E-01 ] # 0008
+  #-------------------------------------------------------------------------------  iter=  9
+ Gradient Norm: {Value:  5.13820E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.3187E-03,  2.0911E-01 ] # 0001
+ -  [ -1.254E-03,  2.3555E-01 ] # 0002
+ -  [ -3.8153E-04,  3.5615E-01 ] # 0003
+ -  [ -1.7671E-04,  4.0358E-01 ] # 0004
+ -  [  4.1552E-03,  6.6555E-01 ] # 0005
+ -  [  5.2358E-02,  4.6773E-01 ] # 0006
+ -  [  5.8359E-02,  7.3804E-01 ] # 0007
+ -  [  6.5389E-02,  7.1884E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  10
+ Gradient Norm: {Value:  3.98630E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.4455E-03,  1.7720E-01 ] # 0001
+ -  [ -1.3878E-03,  2.0369E-01 ] # 0002
+ -  [ -7.7032E-04,  2.7546E-01 ] # 0003
+ -  [ -6.1067E-04,  3.0238E-01 ] # 0004
+ -  [  2.7515E-03,  6.0756E-01 ] # 0005
+ -  [  5.1831E-02,  3.4580E-01 ] # 0006
+ -  [  5.7192E-02,  5.0578E-01 ] # 0007
+ -  [  6.3923E-02,  5.3528E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  11
+ Gradient Norm: {Value:  3.86162E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.5235E-03,  1.3795E-01 ] # 0001
+ -  [ -1.4743E-03,  1.5492E-01 ] # 0002
+ -  [ -1.041E-03,  2.5241E-01 ] # 0003
+ -  [ -9.0425E-04,  2.7708E-01 ] # 0004
+ -  [  1.7068E-03,  5.3015E-01 ] # 0005
+ -  [  5.1448E-02,  3.4757E-01 ] # 0006
+ -  [  5.6363E-02,  5.4434E-01 ] # 0007
+ -  [  6.2785E-02,  5.5793E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  12
+ Gradient Norm: {Value:  2.99059E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.5728E-03,  1.1363E-01 ] # 0001
+ -  [ -1.5328E-03,  1.3331E-01 ] # 0002
+ -  [ -1.2289E-03,  1.9840E-01 ] # 0003
+ -  [ -1.1082E-03,  2.0527E-01 ] # 0004
+ -  [  8.9628E-04,  4.6033E-01 ] # 0005
+ -  [  5.1163E-02,  2.5911E-01 ] # 0006
+ -  [  5.5779E-02,  3.6784E-01 ] # 0007
+ -  [  6.1893E-02,  4.3469E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  13
+ Gradient Norm: {Value:  2.91504E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6045E-03,  8.8461E-02 ] # 0001
+ -  [ -1.5725E-03,  1.0605E-01 ] # 0002
+ -  [ -1.3607E-03,  1.7911E-01 ] # 0003
+ -  [ -1.2547E-03,  1.9168E-01 ] # 0004
+ -  [  2.8796E-04,  4.2057E-01 ] # 0005
+ -  [  5.0945E-02,  2.6444E-01 ] # 0006
+ -  [  5.5348E-02,  3.8981E-01 ] # 0007
+ -  [  6.1158E-02,  4.3948E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  14
+ Gradient Norm: {Value:  2.34966E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6255E-03,  7.5196E-02 ] # 0001
+ -  [ -1.6004E-03,  9.2298E-02 ] # 0002
+ -  [ -1.4537E-03,  1.4408E-01 ] # 0003
+ -  [ -1.3596E-03,  1.4889E-01 ] # 0004
+ -  [ -1.779E-04,  3.5340E-01 ] # 0005
+ -  [  5.0774E-02,  2.0425E-01 ] # 0006
+ -  [  5.5034E-02,  2.7749E-01 ] # 0007
+ -  [  6.0546E-02,  3.7545E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  15
+ Gradient Norm: {Value:  2.34487E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6394E-03,  6.2314E-02 ] # 0001
+ -  [ -1.6199E-03,  7.5920E-02 ] # 0002
+ -  [ -1.5185E-03,  1.3297E-01 ] # 0003
+ -  [ -1.4375E-03,  1.4310E-01 ] # 0004
+ -  [ -5.3242E-04,  3.2254E-01 ] # 0005
+ -  [  5.0637E-02,  2.2066E-01 ] # 0006
+ -  [  5.4794E-02,  2.9977E-01 ] # 0007
+ -  [  6.0017E-02,  3.8664E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  16
+ Gradient Norm: {Value:  1.93396E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6488E-03,  5.0951E-02 ] # 0001
+ -  [ -1.634E-03,  6.6214E-02 ] # 0002
+ -  [ -1.5638E-03,  1.0358E-01 ] # 0003
+ -  [ -1.4945E-03,  1.1363E-01 ] # 0004
+ -  [ -8.0526E-04,  2.7657E-01 ] # 0005
+ -  [  5.0527E-02,  1.6685E-01 ] # 0006
+ -  [  5.461E-02,  2.1593E-01 ] # 0007
+ -  [  5.9551E-02,  3.4298E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  17
+ Gradient Norm: {Value:  1.98452E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6553E-03,  4.2007E-02 ] # 0001
+ -  [ -1.644E-03,  5.6807E-02 ] # 0002
+ -  [ -1.5959E-03,  9.1720E-02 ] # 0003
+ -  [ -1.5379E-03,  1.0933E-01 ] # 0004
+ -  [ -1.0115E-03,  2.5975E-01 ] # 0005
+ -  [  5.0433E-02,  1.8086E-01 ] # 0006
+ -  [  5.4464E-02,  2.4937E-01 ] # 0007
+ -  [  5.913E-02,  3.5685E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  18
+ Gradient Norm: {Value:  1.66068E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6599E-03,  3.5866E-02 ] # 0001
+ -  [ -1.6513E-03,  4.8799E-02 ] # 0002
+ -  [ -1.6184E-03,  7.5503E-02 ] # 0003
+ -  [ -1.5699E-03,  9.0704E-02 ] # 0004
+ -  [ -1.1697E-03,  2.1617E-01 ] # 0005
+ -  [  5.0354E-02,  1.4455E-01 ] # 0006
+ -  [  5.4349E-02,  1.7262E-01 ] # 0007
+ -  [  5.8739E-02,  3.2498E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  19
+ Gradient Norm: {Value:  1.72540E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6631E-03,  3.0433E-02 ] # 0001
+ -  [ -1.6566E-03,  4.2184E-02 ] # 0002
+ -  [ -1.6345E-03,  6.5454E-02 ] # 0003
+ -  [ -1.5946E-03,  8.3488E-02 ] # 0004
+ -  [ -1.2897E-03,  2.0419E-01 ] # 0005
+ -  [  5.0285E-02,  1.5680E-01 ] # 0006
+ -  [  5.4252E-02,  1.9758E-01 ] # 0007
+ -  [  5.8375E-02,  3.4479E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  20
+ Gradient Norm: {Value:  1.48927E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6654E-03,  2.5687E-02 ] # 0001
+ -  [ -1.6606E-03,  3.6279E-02 ] # 0002
+ -  [ -1.6458E-03,  5.5828E-02 ] # 0003
+ -  [ -1.6129E-03,  7.3444E-02 ] # 0004
+ -  [ -1.3825E-03,  1.6812E-01 ] # 0005
+ -  [  5.0224E-02,  1.3093E-01 ] # 0006
+ -  [  5.4171E-02,  1.4739E-01 ] # 0007
+ -  [  5.8027E-02,  3.1593E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  21
+ Gradient Norm: {Value:  1.58759E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6671E-03,  2.3842E-02 ] # 0001
+ -  [ -1.6635E-03,  3.2825E-02 ] # 0002
+ -  [ -1.6539E-03,  4.6947E-02 ] # 0003
+ -  [ -1.627E-03,  6.4009E-02 ] # 0004
+ -  [ -1.4521E-03,  1.6579E-01 ] # 0005
+ -  [  5.0169E-02,  1.3928E-01 ] # 0006
+ -  [  5.4099E-02,  1.6838E-01 ] # 0007
+ -  [  5.7694E-02,  3.4417E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  22
+ Gradient Norm: {Value:  1.39659E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6683E-03,  1.8487E-02 ] # 0001
+ -  [ -1.6656E-03,  2.6992E-02 ] # 0002
+ -  [ -1.6596E-03,  4.2812E-02 ] # 0003
+ -  [ -1.6377E-03,  5.6183E-02 ] # 0004
+ -  [ -1.5049E-03,  1.2979E-01 ] # 0005
+ -  [  5.0121E-02,  1.2562E-01 ] # 0006
+ -  [  5.4038E-02,  1.3683E-01 ] # 0007
+ -  [  5.7372E-02,  3.1405E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  23
+ Gradient Norm: {Value:  1.47535E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6692E-03,  1.7023E-02 ] # 0001
+ -  [ -1.6672E-03,  2.3611E-02 ] # 0002
+ -  [ -1.6635E-03,  3.3418E-02 ] # 0003
+ -  [ -1.6459E-03,  4.9816E-02 ] # 0004
+ -  [ -1.5452E-03,  1.2395E-01 ] # 0005
+ -  [  5.0077E-02,  1.2524E-01 ] # 0006
+ -  [  5.398E-02,  1.4893E-01 ] # 0007
+ -  [  5.7058E-02,  3.4126E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  24
+ Gradient Norm: {Value:  1.32506E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6699E-03,  1.4025E-02 ] # 0001
+ -  [ -1.6684E-03,  2.0003E-02 ] # 0002
+ -  [ -1.6663E-03,  2.9723E-02 ] # 0003
+ -  [ -1.6521E-03,  4.4457E-02 ] # 0004
+ -  [ -1.5758E-03,  1.0075E-01 ] # 0005
+ -  [  5.0036E-02,  1.1202E-01 ] # 0006
+ -  [  5.3929E-02,  1.2673E-01 ] # 0007
+ -  [  5.6748E-02,  3.1344E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  25
+ Gradient Norm: {Value:  1.49360E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6706E-03,  1.4104E-02 ] # 0001
+ -  [ -1.6692E-03,  1.7072E-02 ] # 0002
+ -  [ -1.6681E-03,  2.4289E-02 ] # 0003
+ -  [ -1.6569E-03,  3.8857E-02 ] # 0004
+ -  [ -1.5991E-03,  9.5885E-02 ] # 0005
+ -  [  5.0E-02,  1.1890E-01 ] # 0006
+ -  [  5.3879E-02,  1.3802E-01 ] # 0007
+ -  [  5.6448E-02,  3.6537E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  26
+ Gradient Norm: {Value:  1.29821E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6714E-03,  1.3324E-02 ] # 0001
+ -  [ -1.6699E-03,  1.4659E-02 ] # 0002
+ -  [ -1.6692E-03,  2.0319E-02 ] # 0003
+ -  [ -1.6606E-03,  3.4992E-02 ] # 0004
+ -  [ -1.617E-03,  7.7761E-02 ] # 0005
+ -  [  4.9966E-02,  1.0284E-01 ] # 0006
+ -  [  5.3832E-02,  1.3055E-01 ] # 0007
+ -  [  5.6155E-02,  3.1485E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  27
+ Gradient Norm: {Value:  1.39336E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6721E-03,  1.4559E-02 ] # 0001
+ -  [ -1.6704E-03,  1.2815E-02 ] # 0002
+ -  [ -1.6698E-03,  1.6139E-02 ] # 0003
+ -  [ -1.6635E-03,  3.0137E-02 ] # 0004
+ -  [ -1.6304E-03,  7.6957E-02 ] # 0005
+ -  [  4.9934E-02,  1.1208E-01 ] # 0006
+ -  [  5.3786E-02,  1.3204E-01 ] # 0007
+ -  [  5.5868E-02,  3.4330E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  28
+ Gradient Norm: {Value:  1.26183E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6727E-03,  1.2811E-02 ] # 0001
+ -  [ -1.6708E-03,  1.1606E-02 ] # 0002
+ -  [ -1.6701E-03,  1.1905E-02 ] # 0003
+ -  [ -1.6657E-03,  2.9035E-02 ] # 0004
+ -  [ -1.6405E-03,  5.9569E-02 ] # 0005
+ -  [  4.9906E-02,  9.5000E-02 ] # 0006
+ -  [  5.3742E-02,  1.2567E-01 ] # 0007
+ -  [  5.5586E-02,  3.1261E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  29
+ Gradient Norm: {Value:  1.39177E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6731E-03,  1.2439E-02 ] # 0001
+ -  [ -1.6711E-03,  1.0304E-02 ] # 0002
+ -  [ -1.6703E-03,  8.6701E-03 ] # 0003
+ -  [ -1.6673E-03,  2.2947E-02 ] # 0004
+ -  [ -1.6482E-03,  5.7556E-02 ] # 0005
+ -  [  4.9879E-02,  1.0469E-01 ] # 0006
+ -  [  5.3697E-02,  1.3246E-01 ] # 0007
+ -  [  5.5314E-02,  3.4969E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  30
+ Gradient Norm: {Value:  1.22309E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6735E-03,  1.0428E-02 ] # 0001
+ -  [ -1.6713E-03,  8.8544E-03 ] # 0002
+ -  [ -1.6705E-03,  7.6343E-03 ] # 0003
+ -  [ -1.6686E-03,  2.2280E-02 ] # 0004
+ -  [ -1.6541E-03,  4.5400E-02 ] # 0005
+ -  [  4.9854E-02,  8.8213E-02 ] # 0006
+ -  [  5.3651E-02,  1.2808E-01 ] # 0007
+ -  [  5.505E-02,  3.0445E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  31
+ Gradient Norm: {Value:  1.31278E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6737E-03,  9.9389E-03 ] # 0001
+ -  [ -1.6715E-03,  7.6547E-03 ] # 0002
+ -  [ -1.6706E-03,  5.8285E-03 ] # 0003
+ -  [ -1.6696E-03,  1.7598E-02 ] # 0004
+ -  [ -1.6585E-03,  4.6144E-02 ] # 0005
+ -  [  4.9832E-02,  1.0080E-01 ] # 0006
+ -  [  5.3603E-02,  1.3860E-01 ] # 0007
+ -  [  5.4796E-02,  3.2538E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  32
+ Gradient Norm: {Value:  1.21121E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6739E-03,  8.2041E-03 ] # 0001
+ -  [ -1.6716E-03,  7.0182E-03 ] # 0002
+ -  [ -1.6707E-03,  5.4562E-03 ] # 0003
+ -  [ -1.6703E-03,  1.9107E-02 ] # 0004
+ -  [ -1.6619E-03,  3.4566E-02 ] # 0005
+ -  [  4.9811E-02,  8.2144E-02 ] # 0006
+ -  [  5.3551E-02,  1.3634E-01 ] # 0007
+ -  [  5.4555E-02,  3.0053E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  33
+ Gradient Norm: {Value:  1.26083E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6741E-03,  7.4600E-03 ] # 0001
+ -  [ -1.6717E-03,  5.7229E-03 ] # 0002
+ -  [ -1.671E-03,  5.8955E-03 ] # 0003
+ -  [ -1.6706E-03,  1.2664E-02 ] # 0004
+ -  [ -1.6644E-03,  3.4130E-02 ] # 0005
+ -  [  4.9791E-02,  9.0794E-02 ] # 0006
+ -  [  5.3491E-02,  1.5061E-01 ] # 0007
+ -  [  5.4327E-02,  3.0790E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  34
+ Gradient Norm: {Value:  1.20570E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6742E-03,  6.2565E-03 ] # 0001
+ -  [ -1.6718E-03,  5.4119E-03 ] # 0002
+ -  [ -1.6714E-03,  1.1837E-02 ] # 0003
+ -  [ -1.6707E-03,  7.0970E-03 ] # 0004
+ -  [ -1.6663E-03,  2.6824E-02 ] # 0005
+ -  [  4.9774E-02,  7.7710E-02 ] # 0006
+ -  [  5.342E-02,  1.6752E-01 ] # 0007
+ -  [  5.4121E-02,  2.8499E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  35
+ Gradient Norm: {Value:  1.20741E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6743E-03,  6.0822E-03 ] # 0001
+ -  [ -1.6719E-03,  4.8937E-03 ] # 0002
+ -  [ -1.6717E-03,  1.0547E-02 ] # 0003
+ -  [ -1.6707E-03,  4.2269E-03 ] # 0004
+ -  [ -1.6677E-03,  2.5655E-02 ] # 0005
+ -  [  4.9757E-02,  8.4133E-02 ] # 0006
+ -  [  5.3329E-02,  1.7995E-01 ] # 0007
+ -  [  5.3938E-02,  2.7626E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  36
+ Gradient Norm: {Value:  1.16269E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6743E-03,  4.7381E-03 ] # 0001
+ -  [ -1.672E-03,  5.1318E-03 ] # 0002
+ -  [ -1.6719E-03,  9.1292E-03 ] # 0003
+ -  [ -1.6707E-03,  3.4180E-03 ] # 0004
+ -  [ -1.6688E-03,  1.9893E-02 ] # 0005
+ -  [  4.9742E-02,  7.3570E-02 ] # 0006
+ -  [  5.3214E-02,  2.0912E-01 ] # 0007
+ -  [  5.3792E-02,  2.4180E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  37
+ Gradient Norm: {Value:  1.17786E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6744E-03,  4.5699E-03 ] # 0001
+ -  [ -1.6721E-03,  7.0961E-03 ] # 0002
+ -  [ -1.6719E-03,  7.3725E-03 ] # 0003
+ -  [ -1.6708E-03,  3.2328E-03 ] # 0004
+ -  [ -1.6696E-03,  2.1293E-02 ] # 0005
+ -  [  4.9728E-02,  7.8275E-02 ] # 0006
+ -  [  5.3071E-02,  2.3199E-01 ] # 0007
+ -  [  5.3681E-02,  2.2462E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  38
+ Gradient Norm: {Value:  1.12433E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6744E-03,  3.7156E-03 ] # 0001
+ -  [ -1.6723E-03,  6.9474E-03 ] # 0002
+ -  [ -1.672E-03,  4.9369E-03 ] # 0003
+ -  [ -1.6708E-03,  3.3590E-03 ] # 0004
+ -  [ -1.6701E-03,  1.4439E-02 ] # 0005
+ -  [  4.9715E-02,  6.7849E-02 ] # 0006
+ -  [  5.291E-02,  2.3593E-01 ] # 0007
+ -  [  5.3597E-02,  2.0138E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  39
+ Gradient Norm: {Value:  1.13319E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6744E-03,  3.3035E-03 ] # 0001
+ -  [ -1.6724E-03,  6.2573E-03 ] # 0002
+ -  [ -1.6721E-03,  5.0620E-03 ] # 0003
+ -  [ -1.6709E-03,  4.7244E-03 ] # 0004
+ -  [ -1.6705E-03,  1.4044E-02 ] # 0005
+ -  [  4.9702E-02,  7.2309E-02 ] # 0006
+ -  [  5.2741E-02,  2.6596E-01 ] # 0007
+ -  [  5.3532E-02,  1.6270E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  40
+ Gradient Norm: {Value:  1.07475E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6744E-03,  2.8473E-03 ] # 0001
+ -  [ -1.6725E-03,  5.5198E-03 ] # 0002
+ -  [ -1.6721E-03,  4.5563E-03 ] # 0003
+ -  [ -1.671E-03,  6.3469E-03 ] # 0004
+ -  [ -1.6706E-03,  8.7550E-03 ] # 0005
+ -  [  4.9691E-02,  6.4138E-02 ] # 0006
+ -  [  5.2565E-02,  2.5304E-01 ] # 0007
+ -  [  5.3477E-02,  1.5520E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  41
+ Gradient Norm: {Value:  1.12169E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4784E-03 ] # 0001
+ -  [ -1.6725E-03,  4.9303E-03 ] # 0002
+ -  [ -1.6722E-03,  5.2845E-03 ] # 0003
+ -  [ -1.6712E-03,  8.6028E-03 ] # 0004
+ -  [ -1.6707E-03,  5.9720E-03 ] # 0005
+ -  [  4.9681E-02,  6.6958E-02 ] # 0006
+ -  [  5.2394E-02,  2.7833E-01 ] # 0007
+ -  [  5.3429E-02,  1.3615E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  42
+ Gradient Norm: {Value:  1.03397E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.2784E-03 ] # 0001
+ -  [ -1.6726E-03,  4.2993E-03 ] # 0002
+ -  [ -1.6723E-03,  4.6563E-03 ] # 0003
+ -  [ -1.6713E-03,  6.7175E-03 ] # 0004
+ -  [ -1.6707E-03,  3.0985E-03 ] # 0005
+ -  [  4.9671E-02,  6.5908E-02 ] # 0006
+ -  [  5.2228E-02,  2.4691E-01 ] # 0007
+ -  [  5.3385E-02,  1.4185E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  43
+ Gradient Norm: {Value:  1.07416E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.7876E-03 ] # 0001
+ -  [ -1.6726E-03,  3.9154E-03 ] # 0002
+ -  [ -1.6723E-03,  5.2993E-03 ] # 0003
+ -  [ -1.6714E-03,  6.8742E-03 ] # 0004
+ -  [ -1.6707E-03,  2.6797E-03 ] # 0005
+ -  [  4.9662E-02,  6.3092E-02 ] # 0006
+ -  [  5.2066E-02,  2.6940E-01 ] # 0007
+ -  [  5.3345E-02,  1.2509E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  44
+ Gradient Norm: {Value:  1.03359E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.6506E-03 ] # 0001
+ -  [ -1.6726E-03,  3.3799E-03 ] # 0002
+ -  [ -1.6724E-03,  4.4886E-03 ] # 0003
+ -  [ -1.6715E-03,  4.6100E-03 ] # 0004
+ -  [ -1.6707E-03,  1.5959E-03 ] # 0005
+ -  [  4.9654E-02,  5.9149E-02 ] # 0006
+ -  [  5.1911E-02,  2.5176E-01 ] # 0007
+ -  [  5.3306E-02,  1.3610E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  45
+ Gradient Norm: {Value:  1.03797E-02, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.3252E-03 ] # 0001
+ -  [ -1.6727E-03,  3.1412E-03 ] # 0002
+ -  [ -1.6724E-03,  4.8013E-03 ] # 0003
+ -  [ -1.6715E-03,  5.2992E-03 ] # 0004
+ -  [ -1.6707E-03,  1.6725E-03 ] # 0005
+ -  [  4.9646E-02,  5.6778E-02 ] # 0006
+ -  [  5.1763E-02,  2.6202E-01 ] # 0007
+ -  [  5.3268E-02,  1.1936E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  46
+ Gradient Norm: {Value:  9.88406E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.2277E-03 ] # 0001
+ -  [ -1.6727E-03,  2.7600E-03 ] # 0002
+ -  [ -1.6725E-03,  3.5106E-03 ] # 0003
+ -  [ -1.6715E-03,  3.0738E-03 ] # 0004
+ -  [ -1.6707E-03,  1.0754E-03 ] # 0005
+ -  [  4.9639E-02,  5.5182E-02 ] # 0006
+ -  [  5.1623E-02,  2.3368E-01 ] # 0007
+ -  [  5.3231E-02,  1.4308E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  47
+ Gradient Norm: {Value:  9.70150E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  9.8057E-04 ] # 0001
+ -  [ -1.6727E-03,  2.4573E-03 ] # 0002
+ -  [ -1.6725E-03,  3.6833E-03 ] # 0003
+ -  [ -1.6716E-03,  3.3234E-03 ] # 0004
+ -  [ -1.6707E-03,  1.0465E-03 ] # 0005
+ -  [  4.9633E-02,  5.1563E-02 ] # 0006
+ -  [  5.1489E-02,  2.4343E-01 ] # 0007
+ -  [  5.3196E-02,  1.1552E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  48
+ Gradient Norm: {Value:  9.26059E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  9.3004E-04 ] # 0001
+ -  [ -1.6727E-03,  2.2792E-03 ] # 0002
+ -  [ -1.6725E-03,  2.7209E-03 ] # 0003
+ -  [ -1.6716E-03,  2.2037E-03 ] # 0004
+ -  [ -1.6707E-03,  8.1902E-04 ] # 0005
+ -  [  4.9627E-02,  4.9696E-02 ] # 0006
+ -  [  5.1363E-02,  2.2228E-01 ] # 0007
+ -  [  5.316E-02,  1.2927E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  49
+ Gradient Norm: {Value:  9.41349E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  7.3190E-04 ] # 0001
+ -  [ -1.6727E-03,  1.9760E-03 ] # 0002
+ -  [ -1.6725E-03,  2.7751E-03 ] # 0003
+ -  [ -1.6716E-03,  2.2262E-03 ] # 0004
+ -  [ -1.6707E-03,  7.1999E-04 ] # 0005
+ -  [  4.9622E-02,  4.8551E-02 ] # 0006
+ -  [  5.1244E-02,  2.3392E-01 ] # 0007
+ -  [  5.3126E-02,  1.1746E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  50
+ Gradient Norm: {Value:  8.87532E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  6.8290E-04 ] # 0001
+ -  [ -1.6727E-03,  1.8181E-03 ] # 0002
+ -  [ -1.6725E-03,  2.0597E-03 ] # 0003
+ -  [ -1.6716E-03,  1.6274E-03 ] # 0004
+ -  [ -1.6707E-03,  5.8259E-04 ] # 0005
+ -  [  4.9616E-02,  4.5295E-02 ] # 0006
+ -  [  5.1129E-02,  2.1185E-01 ] # 0007
+ -  [  5.3091E-02,  1.2678E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  51
+ Gradient Norm: {Value:  9.40976E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  5.5312E-04 ] # 0001
+ -  [ -1.6727E-03,  1.5911E-03 ] # 0002
+ -  [ -1.6725E-03,  2.2729E-03 ] # 0003
+ -  [ -1.6716E-03,  1.5944E-03 ] # 0004
+ -  [ -1.6707E-03,  5.2144E-04 ] # 0005
+ -  [  4.9612E-02,  4.7044E-02 ] # 0006
+ -  [  5.1022E-02,  2.3293E-01 ] # 0007
+ -  [  5.3057E-02,  1.1981E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  52
+ Gradient Norm: {Value:  8.39229E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  4.9992E-04 ] # 0001
+ -  [ -1.6727E-03,  1.4342E-03 ] # 0002
+ -  [ -1.6726E-03,  1.4676E-03 ] # 0003
+ -  [ -1.6716E-03,  1.2040E-03 ] # 0004
+ -  [ -1.6707E-03,  4.3047E-04 ] # 0005
+ -  [  4.9607E-02,  4.0850E-02 ] # 0006
+ -  [  5.0921E-02,  1.9801E-01 ] # 0007
+ -  [  5.3022E-02,  1.2434E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  53
+ Gradient Norm: {Value:  8.99611E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  4.0130E-04 ] # 0001
+ -  [ -1.6727E-03,  1.2603E-03 ] # 0002
+ -  [ -1.6726E-03,  1.6197E-03 ] # 0003
+ -  [ -1.6716E-03,  1.1735E-03 ] # 0004
+ -  [ -1.6707E-03,  3.9410E-04 ] # 0005
+ -  [  4.9603E-02,  4.2501E-02 ] # 0006
+ -  [  5.0827E-02,  2.1726E-01 ] # 0007
+ -  [  5.2988E-02,  1.2543E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  54
+ Gradient Norm: {Value:  7.94675E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.6107E-04 ] # 0001
+ -  [ -1.6727E-03,  1.1322E-03 ] # 0002
+ -  [ -1.6726E-03,  1.0954E-03 ] # 0003
+ -  [ -1.6716E-03,  8.8835E-04 ] # 0004
+ -  [ -1.6707E-03,  3.2487E-04 ] # 0005
+ -  [  4.96E-02,  3.8264E-02 ] # 0006
+ -  [  5.0738E-02,  1.8409E-01 ] # 0007
+ -  [  5.2952E-02,  1.2314E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  55
+ Gradient Norm: {Value:  9.48414E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.3677E-04 ] # 0001
+ -  [ -1.6727E-03,  1.1590E-03 ] # 0002
+ -  [ -1.6726E-03,  1.1591E-03 ] # 0003
+ -  [ -1.6716E-03,  8.7748E-04 ] # 0004
+ -  [ -1.6707E-03,  3.1734E-04 ] # 0005
+ -  [  4.9596E-02,  3.9018E-02 ] # 0006
+ -  [  5.0656E-02,  2.0340E-01 ] # 0007
+ -  [  5.2916E-02,  1.7048E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  56
+ Gradient Norm: {Value:  7.67456E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.6287E-04 ] # 0001
+ -  [ -1.6727E-03,  8.9534E-04 ] # 0002
+ -  [ -1.6726E-03,  8.9324E-04 ] # 0003
+ -  [ -1.6716E-03,  6.7287E-04 ] # 0004
+ -  [ -1.6707E-03,  2.4973E-04 ] # 0005
+ -  [  4.9593E-02,  3.5451E-02 ] # 0006
+ -  [  5.0579E-02,  1.7510E-01 ] # 0007
+ -  [  5.2881E-02,  1.2329E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  57
+ Gradient Norm: {Value:  8.29529E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.3168E-04 ] # 0001
+ -  [ -1.6727E-03,  7.9358E-04 ] # 0002
+ -  [ -1.6726E-03,  8.5291E-04 ] # 0003
+ -  [ -1.6716E-03,  6.4082E-04 ] # 0004
+ -  [ -1.6707E-03,  2.2718E-04 ] # 0005
+ -  [  4.959E-02,  3.5918E-02 ] # 0006
+ -  [  5.0506E-02,  1.8456E-01 ] # 0007
+ -  [  5.2847E-02,  1.4034E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  58
+ Gradient Norm: {Value:  7.27100E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.8812E-04 ] # 0001
+ -  [ -1.6727E-03,  6.6397E-04 ] # 0002
+ -  [ -1.6726E-03,  6.5326E-04 ] # 0003
+ -  [ -1.6716E-03,  5.0134E-04 ] # 0004
+ -  [ -1.6707E-03,  1.8825E-04 ] # 0005
+ -  [  4.9587E-02,  3.4001E-02 ] # 0006
+ -  [  5.0439E-02,  1.6583E-01 ] # 0007
+ -  [  5.2813E-02,  1.1679E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  59
+ Gradient Norm: {Value:  7.70902E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.6865E-04 ] # 0001
+ -  [ -1.6727E-03,  6.1488E-04 ] # 0002
+ -  [ -1.6726E-03,  6.3998E-04 ] # 0003
+ -  [ -1.6716E-03,  4.7727E-04 ] # 0004
+ -  [ -1.6707E-03,  1.7364E-04 ] # 0005
+ -  [  4.9585E-02,  3.2840E-02 ] # 0006
+ -  [  5.0376E-02,  1.7368E-01 ] # 0007
+ -  [  5.2778E-02,  1.2766E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  60
+ Gradient Norm: {Value:  7.03726E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.4062E-04 ] # 0001
+ -  [ -1.6727E-03,  5.1226E-04 ] # 0002
+ -  [ -1.6726E-03,  5.0359E-04 ] # 0003
+ -  [ -1.6716E-03,  3.8295E-04 ] # 0004
+ -  [ -1.6707E-03,  1.4616E-04 ] # 0005
+ -  [  4.9582E-02,  3.0786E-02 ] # 0006
+ -  [  5.0315E-02,  1.5571E-01 ] # 0007
+ -  [  5.2744E-02,  1.2010E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  61
+ Gradient Norm: {Value:  8.01972E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.2731E-04 ] # 0001
+ -  [ -1.6727E-03,  5.2961E-04 ] # 0002
+ -  [ -1.6726E-03,  4.9962E-04 ] # 0003
+ -  [ -1.6716E-03,  3.7230E-04 ] # 0004
+ -  [ -1.6707E-03,  1.4390E-04 ] # 0005
+ -  [  4.958E-02,  3.0769E-02 ] # 0006
+ -  [  5.0259E-02,  1.7837E-01 ] # 0007
+ -  [  5.2709E-02,  1.3671E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  62
+ Gradient Norm: {Value:  6.60573E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  1.0655E-04 ] # 0001
+ -  [ -1.6727E-03,  3.8281E-04 ] # 0002
+ -  [ -1.6726E-03,  3.8351E-04 ] # 0003
+ -  [ -1.6716E-03,  2.8565E-04 ] # 0004
+ -  [ -1.6707E-03,  1.1223E-04 ] # 0005
+ -  [  4.9578E-02,  2.8149E-02 ] # 0006
+ -  [  5.0207E-02,  1.4097E-01 ] # 0007
+ -  [  5.2675E-02,  1.1935E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  63
+ Gradient Norm: {Value:  7.57139E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  9.6781E-05 ] # 0001
+ -  [ -1.6727E-03,  4.0150E-04 ] # 0002
+ -  [ -1.6726E-03,  3.6473E-04 ] # 0003
+ -  [ -1.6716E-03,  2.7619E-04 ] # 0004
+ -  [ -1.6707E-03,  1.0992E-04 ] # 0005
+ -  [  4.9576E-02,  2.8375E-02 ] # 0006
+ -  [  5.0159E-02,  1.6436E-01 ] # 0007
+ -  [  5.264E-02,  1.3432E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  64
+ Gradient Norm: {Value:  6.31650E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  8.0748E-05 ] # 0001
+ -  [ -1.6727E-03,  2.8980E-04 ] # 0002
+ -  [ -1.6726E-03,  2.9201E-04 ] # 0003
+ -  [ -1.6716E-03,  2.1088E-04 ] # 0004
+ -  [ -1.6707E-03,  8.7632E-05 ] # 0005
+ -  [  4.9575E-02,  2.7143E-02 ] # 0006
+ -  [  5.0114E-02,  1.3130E-01 ] # 0007
+ -  [  5.2605E-02,  1.1807E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  65
+ Gradient Norm: {Value:  7.32126E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  8.2268E-05 ] # 0001
+ -  [ -1.6727E-03,  2.9293E-04 ] # 0002
+ -  [ -1.6726E-03,  2.6347E-04 ] # 0003
+ -  [ -1.6716E-03,  1.9670E-04 ] # 0004
+ -  [ -1.6707E-03,  8.2400E-05 ] # 0005
+ -  [  4.9573E-02,  2.5899E-02 ] # 0006
+ -  [  5.0073E-02,  1.5135E-01 ] # 0007
+ -  [  5.257E-02,  1.3894E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  66
+ Gradient Norm: {Value:  6.21467E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  5.7014E-05 ] # 0001
+ -  [ -1.6727E-03,  2.2658E-04 ] # 0002
+ -  [ -1.6726E-03,  2.1638E-04 ] # 0003
+ -  [ -1.6716E-03,  1.6137E-04 ] # 0004
+ -  [ -1.6707E-03,  7.1065E-05 ] # 0005
+ -  [  4.9572E-02,  2.5245E-02 ] # 0006
+ -  [  5.0035E-02,  1.2420E-01 ] # 0007
+ -  [  5.2535E-02,  1.2180E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  67
+ Gradient Norm: {Value:  6.82723E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  5.8304E-05 ] # 0001
+ -  [ -1.6727E-03,  2.2655E-04 ] # 0002
+ -  [ -1.6726E-03,  2.0149E-04 ] # 0003
+ -  [ -1.6716E-03,  1.4782E-04 ] # 0004
+ -  [ -1.6707E-03,  6.7386E-05 ] # 0005
+ -  [  4.957E-02,  2.3894E-02 ] # 0006
+ -  [  4.9999E-02,  1.3477E-01 ] # 0007
+ -  [  5.25E-02,  1.3621E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  68
+ Gradient Norm: {Value:  6.13100E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  4.6451E-05 ] # 0001
+ -  [ -1.6727E-03,  1.7703E-04 ] # 0002
+ -  [ -1.6726E-03,  1.6501E-04 ] # 0003
+ -  [ -1.6716E-03,  1.2096E-04 ] # 0004
+ -  [ -1.6707E-03,  5.9415E-05 ] # 0005
+ -  [  4.9569E-02,  2.2833E-02 ] # 0006
+ -  [  4.9965E-02,  1.1563E-01 ] # 0007
+ -  [  5.2465E-02,  1.2720E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  69
+ Gradient Norm: {Value:  6.86191E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  4.5631E-05 ] # 0001
+ -  [ -1.6727E-03,  1.8304E-04 ] # 0002
+ -  [ -1.6726E-03,  1.6171E-04 ] # 0003
+ -  [ -1.6716E-03,  1.1847E-04 ] # 0004
+ -  [ -1.6707E-03,  5.8411E-05 ] # 0005
+ -  [  4.9568E-02,  2.2187E-02 ] # 0006
+ -  [  4.9934E-02,  1.3580E-01 ] # 0007
+ -  [  5.2429E-02,  1.3688E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  70
+ Gradient Norm: {Value:  5.88207E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.8637E-05 ] # 0001
+ -  [ -1.6727E-03,  1.3721E-04 ] # 0002
+ -  [ -1.6726E-03,  1.2487E-04 ] # 0003
+ -  [ -1.6716E-03,  9.2469E-05 ] # 0004
+ -  [ -1.6707E-03,  5.1370E-05 ] # 0005
+ -  [  4.9567E-02,  2.1822E-02 ] # 0006
+ -  [  4.9905E-02,  1.0364E-01 ] # 0007
+ -  [  5.2394E-02,  1.2830E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  71
+ Gradient Norm: {Value:  6.52397E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.8114E-05 ] # 0001
+ -  [ -1.6727E-03,  1.3542E-04 ] # 0002
+ -  [ -1.6726E-03,  1.2583E-04 ] # 0003
+ -  [ -1.6716E-03,  9.0581E-05 ] # 0004
+ -  [ -1.6707E-03,  4.9916E-05 ] # 0005
+ -  [  4.9566E-02,  2.0345E-02 ] # 0006
+ -  [  4.9878E-02,  1.2473E-01 ] # 0007
+ -  [  5.2359E-02,  1.3446E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  72
+ Gradient Norm: {Value:  5.72995E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.3330E-05 ] # 0001
+ -  [ -1.6727E-03,  1.0851E-04 ] # 0002
+ -  [ -1.6726E-03,  9.5566E-05 ] # 0003
+ -  [ -1.6716E-03,  7.1875E-05 ] # 0004
+ -  [ -1.6707E-03,  4.5912E-05 ] # 0005
+ -  [  4.9565E-02,  1.9391E-02 ] # 0006
+ -  [  4.9853E-02,  9.4302E-02 ] # 0007
+ -  [  5.2324E-02,  1.3037E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  73
+ Gradient Norm: {Value:  6.27582E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  3.2739E-05 ] # 0001
+ -  [ -1.6727E-03,  1.0470E-04 ] # 0002
+ -  [ -1.6726E-03,  9.5423E-05 ] # 0003
+ -  [ -1.6716E-03,  7.0150E-05 ] # 0004
+ -  [ -1.6707E-03,  4.4951E-05 ] # 0005
+ -  [  4.9564E-02,  1.9921E-02 ] # 0006
+ -  [  4.983E-02,  1.1545E-01 ] # 0007
+ -  [  5.2288E-02,  1.3336E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  74
+ Gradient Norm: {Value:  5.62969E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.9853E-05 ] # 0001
+ -  [ -1.6727E-03,  8.7116E-05 ] # 0002
+ -  [ -1.6726E-03,  7.4572E-05 ] # 0003
+ -  [ -1.6716E-03,  5.7808E-05 ] # 0004
+ -  [ -1.6707E-03,  4.2537E-05 ] # 0005
+ -  [  4.9563E-02,  1.7303E-02 ] # 0006
+ -  [  4.981E-02,  8.6879E-02 ] # 0007
+ -  [  5.2252E-02,  1.3232E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  75
+ Gradient Norm: {Value:  6.28464E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.9956E-05 ] # 0001
+ -  [ -1.6727E-03,  9.1810E-05 ] # 0002
+ -  [ -1.6726E-03,  7.7038E-05 ] # 0003
+ -  [ -1.6716E-03,  5.9110E-05 ] # 0004
+ -  [ -1.6707E-03,  4.2726E-05 ] # 0005
+ -  [  4.9563E-02,  1.7967E-02 ] # 0006
+ -  [  4.979E-02,  9.9021E-02 ] # 0007
+ -  [  5.2216E-02,  1.4652E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  76
+ Gradient Norm: {Value:  5.44430E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.7538E-05 ] # 0001
+ -  [ -1.6727E-03,  6.8761E-05 ] # 0002
+ -  [ -1.6726E-03,  5.8797E-05 ] # 0003
+ -  [ -1.6716E-03,  4.7348E-05 ] # 0004
+ -  [ -1.6707E-03,  4.0191E-05 ] # 0005
+ -  [  4.9562E-02,  1.6424E-02 ] # 0006
+ -  [  4.9773E-02,  8.1568E-02 ] # 0007
+ -  [  5.2181E-02,  1.2957E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  77
+ Gradient Norm: {Value:  5.81969E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.7308E-05 ] # 0001
+ -  [ -1.6727E-03,  6.7285E-05 ] # 0002
+ -  [ -1.6726E-03,  6.0028E-05 ] # 0003
+ -  [ -1.6716E-03,  4.7336E-05 ] # 0004
+ -  [ -1.6707E-03,  3.9996E-05 ] # 0005
+ -  [  4.9561E-02,  1.6387E-02 ] # 0006
+ -  [  4.9756E-02,  9.3612E-02 ] # 0007
+ -  [  5.2145E-02,  1.3440E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  78
+ Gradient Norm: {Value:  5.34734E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.6274E-05 ] # 0001
+ -  [ -1.6727E-03,  5.8574E-05 ] # 0002
+ -  [ -1.6726E-03,  4.8526E-05 ] # 0003
+ -  [ -1.6716E-03,  4.1685E-05 ] # 0004
+ -  [ -1.6707E-03,  3.9094E-05 ] # 0005
+ -  [  4.9561E-02,  1.5175E-02 ] # 0006
+ -  [  4.974E-02,  7.6132E-02 ] # 0007
+ -  [  5.211E-02,  1.2980E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  79
+ Gradient Norm: {Value:  5.91679E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.6083E-05 ] # 0001
+ -  [ -1.6727E-03,  5.6253E-05 ] # 0002
+ -  [ -1.6726E-03,  4.9304E-05 ] # 0003
+ -  [ -1.6716E-03,  4.1185E-05 ] # 0004
+ -  [ -1.6707E-03,  3.8881E-05 ] # 0005
+ -  [  4.956E-02,  1.4972E-02 ] # 0006
+ -  [  4.9726E-02,  9.7800E-02 ] # 0007
+ -  [  5.2074E-02,  1.3497E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  80
+ Gradient Norm: {Value:  5.24308E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.5557E-05 ] # 0001
+ -  [ -1.6727E-03,  5.1323E-05 ] # 0002
+ -  [ -1.6726E-03,  4.1408E-05 ] # 0003
+ -  [ -1.6716E-03,  3.7870E-05 ] # 0004
+ -  [ -1.6707E-03,  3.8422E-05 ] # 0005
+ -  [  4.956E-02,  1.4734E-02 ] # 0006
+ -  [  4.9713E-02,  6.8132E-02 ] # 0007
+ -  [  5.2039E-02,  1.3089E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  81
+ Gradient Norm: {Value:  6.12702E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.5529E-05 ] # 0001
+ -  [ -1.6727E-03,  4.9808E-05 ] # 0002
+ -  [ -1.6726E-03,  4.1735E-05 ] # 0003
+ -  [ -1.6716E-03,  3.7218E-05 ] # 0004
+ -  [ -1.6707E-03,  3.8259E-05 ] # 0005
+ -  [  4.9559E-02,  1.3729E-02 ] # 0006
+ -  [  4.9701E-02,  8.2944E-02 ] # 0007
+ -  [  5.2003E-02,  1.5154E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  82
+ Gradient Norm: {Value:  5.09788E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.5119E-05 ] # 0001
+ -  [ -1.6727E-03,  4.6526E-05 ] # 0002
+ -  [ -1.6726E-03,  3.6759E-05 ] # 0003
+ -  [ -1.6716E-03,  3.5667E-05 ] # 0004
+ -  [ -1.6707E-03,  3.8026E-05 ] # 0005
+ -  [  4.9559E-02,  1.2911E-02 ] # 0006
+ -  [  4.9689E-02,  6.4440E-02 ] # 0007
+ -  [  5.1968E-02,  1.2834E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  83
+ Gradient Norm: {Value:  5.78179E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.5057E-05 ] # 0001
+ -  [ -1.6727E-03,  4.5550E-05 ] # 0002
+ -  [ -1.6726E-03,  3.7819E-05 ] # 0003
+ -  [ -1.6716E-03,  3.5404E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7953E-05 ] # 0005
+ -  [  4.9559E-02,  1.3047E-02 ] # 0006
+ -  [  4.9679E-02,  7.6365E-02 ] # 0007
+ -  [  5.1932E-02,  1.4402E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  84
+ Gradient Norm: {Value:  5.31065E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4873E-05 ] # 0001
+ -  [ -1.6727E-03,  4.3326E-05 ] # 0002
+ -  [ -1.6726E-03,  3.3766E-05 ] # 0003
+ -  [ -1.6716E-03,  3.4260E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7787E-05 ] # 0005
+ -  [  4.9558E-02,  1.1795E-02 ] # 0006
+ -  [  4.967E-02,  5.9813E-02 ] # 0007
+ -  [  5.1897E-02,  1.3728E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  85
+ Gradient Norm: {Value:  5.64334E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4817E-05 ] # 0001
+ -  [ -1.6727E-03,  4.2717E-05 ] # 0002
+ -  [ -1.6726E-03,  3.4032E-05 ] # 0003
+ -  [ -1.6716E-03,  3.4041E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7745E-05 ] # 0005
+ -  [  4.9558E-02,  1.2124E-02 ] # 0006
+ -  [  4.9661E-02,  6.7647E-02 ] # 0007
+ -  [  5.1862E-02,  1.4407E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  86
+ Gradient Norm: {Value:  5.17472E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4717E-05 ] # 0001
+ -  [ -1.6727E-03,  4.1132E-05 ] # 0002
+ -  [ -1.6726E-03,  3.1892E-05 ] # 0003
+ -  [ -1.6716E-03,  3.3390E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7636E-05 ] # 0005
+ -  [  4.9558E-02,  1.0658E-02 ] # 0006
+ -  [  4.9653E-02,  5.6374E-02 ] # 0007
+ -  [  5.1826E-02,  1.3465E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  87
+ Gradient Norm: {Value:  5.49211E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4692E-05 ] # 0001
+ -  [ -1.6727E-03,  4.1369E-05 ] # 0002
+ -  [ -1.6726E-03,  3.1884E-05 ] # 0003
+ -  [ -1.6716E-03,  3.3425E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7647E-05 ] # 0005
+ -  [  4.9557E-02,  1.1789E-02 ] # 0006
+ -  [  4.9645E-02,  6.0729E-02 ] # 0007
+ -  [  5.1791E-02,  1.4249E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  88
+ Gradient Norm: {Value:  5.04249E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4623E-05 ] # 0001
+ -  [ -1.6727E-03,  3.9693E-05 ] # 0002
+ -  [ -1.6726E-03,  3.0877E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2826E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7545E-05 ] # 0005
+ -  [  4.9557E-02,  9.4378E-03 ] # 0006
+ -  [  4.9638E-02,  5.2911E-02 ] # 0007
+ -  [  5.1757E-02,  1.3211E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  89
+ Gradient Norm: {Value:  5.13124E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4610E-05 ] # 0001
+ -  [ -1.6727E-03,  3.9524E-05 ] # 0002
+ -  [ -1.6726E-03,  3.0710E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2812E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7533E-05 ] # 0005
+ -  [  4.9557E-02,  1.0607E-02 ] # 0006
+ -  [  4.9632E-02,  5.5677E-02 ] # 0007
+ -  [  5.1721E-02,  1.3361E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  90
+ Gradient Norm: {Value:  4.99208E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4579E-05 ] # 0001
+ -  [ -1.6727E-03,  3.9015E-05 ] # 0002
+ -  [ -1.6726E-03,  3.0188E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2602E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7502E-05 ] # 0005
+ -  [  4.9557E-02,  9.0005E-03 ] # 0006
+ -  [  4.9626E-02,  4.9908E-02 ] # 0007
+ -  [  5.1687E-02,  1.3178E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  91
+ Gradient Norm: {Value:  5.06196E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4568E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8877E-05 ] # 0002
+ -  [ -1.6726E-03,  3.0036E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2561E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7492E-05 ] # 0005
+ -  [  4.9557E-02,  9.6429E-03 ] # 0006
+ -  [  4.9621E-02,  5.3267E-02 ] # 0007
+ -  [  5.1652E-02,  1.3255E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  92
+ Gradient Norm: {Value:  5.12396E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4556E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8690E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9776E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2477E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7483E-05 ] # 0005
+ -  [  4.9556E-02,  8.2721E-03 ] # 0006
+ -  [  4.9615E-02,  4.6348E-02 ] # 0007
+ -  [  5.1618E-02,  1.3707E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  93
+ Gradient Norm: {Value:  4.98870E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4547E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8544E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9680E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2442E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7473E-05 ] # 0005
+ -  [  4.9556E-02,  8.8198E-03 ] # 0006
+ -  [  4.9611E-02,  5.3554E-02 ] # 0007
+ -  [  5.1583E-02,  1.3025E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  94
+ Gradient Norm: {Value:  5.58841E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4541E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8468E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9565E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2395E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7467E-05 ] # 0005
+ -  [  4.9556E-02,  7.6518E-03 ] # 0006
+ -  [  4.9606E-02,  4.1977E-02 ] # 0007
+ -  [  5.1548E-02,  1.5220E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  95
+ Gradient Norm: {Value:  4.74612E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4535E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8356E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9464E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2366E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7461E-05 ] # 0005
+ -  [  4.9556E-02,  8.1726E-03 ] # 0006
+ -  [  4.9602E-02,  4.5786E-02 ] # 0007
+ -  [  5.1514E-02,  1.2593E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  96
+ Gradient Norm: {Value:  5.35581E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4531E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8318E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9398E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2344E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7458E-05 ] # 0005
+ -  [  4.9556E-02,  7.1729E-03 ] # 0006
+ -  [  4.9599E-02,  3.8943E-02 ] # 0007
+ -  [  5.1479E-02,  1.4622E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  97
+ Gradient Norm: {Value:  4.73041E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4528E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8245E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9334E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2325E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7454E-05 ] # 0005
+ -  [  4.9556E-02,  7.4646E-03 ] # 0006
+ -  [  4.9595E-02,  4.2731E-02 ] # 0007
+ -  [  5.1445E-02,  1.2657E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  98
+ Gradient Norm: {Value:  5.43024E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4527E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8233E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9331E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2318E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7453E-05 ] # 0005
+ -  [  4.9556E-02,  6.9828E-03 ] # 0006
+ -  [  4.9592E-02,  3.6194E-02 ] # 0007
+ -  [  5.1411E-02,  1.4910E-01 ] # 0008
+  #------------------------------------------------------------------------------  iter=  99
+ Gradient Norm: {Value:  4.63676E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4524E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8181E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9262E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2299E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7450E-05 ] # 0005
+ -  [  4.9555E-02,  6.7609E-03 ] # 0006
+ -  [  4.9589E-02,  4.0061E-02 ] # 0007
+ -  [  5.1378E-02,  1.2470E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  100
+ Gradient Norm: {Value:  5.20858E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4523E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8176E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9257E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2297E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7450E-05 ] # 0005
+ -  [  4.9555E-02,  6.2324E-03 ] # 0006
+ -  [  4.9586E-02,  3.2856E-02 ] # 0007
+ -  [  5.1345E-02,  1.4348E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  101
+ Gradient Norm: {Value:  4.56484E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4522E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8145E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9228E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2287E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7448E-05 ] # 0005
+ -  [  4.9555E-02,  6.6203E-03 ] # 0006
+ -  [  4.9584E-02,  3.7241E-02 ] # 0007
+ -  [  5.1312E-02,  1.2345E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  102
+ Gradient Norm: {Value:  5.42864E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4522E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8145E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9229E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2286E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7448E-05 ] # 0005
+ -  [  4.9555E-02,  5.5724E-03 ] # 0006
+ -  [  4.9582E-02,  3.0275E-02 ] # 0007
+ -  [  5.1279E-02,  1.5043E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  103
+ Gradient Norm: {Value:  4.64213E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4521E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8127E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9206E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2281E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7447E-05 ] # 0005
+ -  [  4.9555E-02,  6.0046E-03 ] # 0006
+ -  [  4.9579E-02,  3.5936E-02 ] # 0007
+ -  [  5.1248E-02,  1.2614E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  104
+ Gradient Norm: {Value:  5.05591E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8123E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9207E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2279E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7447E-05 ] # 0005
+ -  [  4.9555E-02,  5.1486E-03 ] # 0006
+ -  [  4.9578E-02,  2.7236E-02 ] # 0007
+ -  [  5.1216E-02,  1.4029E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  105
+ Gradient Norm: {Value:  4.57583E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8117E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9193E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2277E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7447E-05 ] # 0005
+ -  [  4.9555E-02,  5.5492E-03 ] # 0006
+ -  [  4.9576E-02,  3.1790E-02 ] # 0007
+ -  [  5.1185E-02,  1.2534E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  106
+ Gradient Norm: {Value:  4.84180E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8113E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9191E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2276E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  4.7231E-03 ] # 0006
+ -  [  4.9574E-02,  2.6287E-02 ] # 0007
+ -  [  5.1153E-02,  1.3432E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  107
+ Gradient Norm: {Value:  4.58056E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8108E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9187E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2274E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  5.2491E-03 ] # 0006
+ -  [  4.9573E-02,  2.7930E-02 ] # 0007
+ -  [  5.1122E-02,  1.2640E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  108
+ Gradient Norm: {Value:  5.18363E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8109E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9186E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2274E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  4.2671E-03 ] # 0006
+ -  [  4.9571E-02,  2.4587E-02 ] # 0007
+ -  [  5.1091E-02,  1.4448E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  109
+ Gradient Norm: {Value:  4.39494E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8104E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9183E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2273E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  4.8601E-03 ] # 0006
+ -  [  4.957E-02,  2.6391E-02 ] # 0007
+ -  [  5.1061E-02,  1.2138E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  110
+ Gradient Norm: {Value:  4.83573E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4520E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8104E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9182E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2273E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  3.9549E-03 ] # 0006
+ -  [  4.9569E-02,  2.2738E-02 ] # 0007
+ -  [  5.103E-02,  1.3481E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  111
+ Gradient Norm: {Value:  4.45408E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8102E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9181E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  4.5143E-03 ] # 0006
+ -  [  4.9567E-02,  2.6055E-02 ] # 0007
+ -  [  5.1001E-02,  1.2317E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  112
+ Gradient Norm: {Value:  4.76172E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8102E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9180E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  3.6200E-03 ] # 0006
+ -  [  4.9566E-02,  2.1155E-02 ] # 0007
+ -  [  5.0971E-02,  1.3296E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  113
+ Gradient Norm: {Value:  4.34110E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8101E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9180E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  4.4684E-03 ] # 0006
+ -  [  4.9565E-02,  2.2732E-02 ] # 0007
+ -  [  5.0943E-02,  1.2058E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  114
+ Gradient Norm: {Value:  4.65787E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8101E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9179E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  3.2231E-03 ] # 0006
+ -  [  4.9565E-02,  2.0045E-02 ] # 0007
+ -  [  5.0914E-02,  1.3017E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  115
+ Gradient Norm: {Value:  4.24147E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8101E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9179E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9555E-02,  3.9124E-03 ] # 0006
+ -  [  4.9564E-02,  2.0768E-02 ] # 0007
+ -  [  5.0886E-02,  1.1809E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  116
+ Gradient Norm: {Value:  4.61639E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8101E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  3.0383E-03 ] # 0006
+ -  [  4.9563E-02,  2.0022E-02 ] # 0007
+ -  [  5.0857E-02,  1.2899E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  117
+ Gradient Norm: {Value:  4.14415E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  3.6043E-03 ] # 0006
+ -  [  4.9562E-02,  1.8692E-02 ] # 0007
+ -  [  5.083E-02,  1.1566E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  118
+ Gradient Norm: {Value:  4.65021E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.9524E-03 ] # 0006
+ -  [  4.9562E-02,  1.7603E-02 ] # 0007
+ -  [  5.0802E-02,  1.3031E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  119
+ Gradient Norm: {Value:  4.19854E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  3.2486E-03 ] # 0006
+ -  [  4.9561E-02,  1.7928E-02 ] # 0007
+ -  [  5.0775E-02,  1.1735E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  120
+ Gradient Norm: {Value:  5.50372E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.6933E-03 ] # 0006
+ -  [  4.9561E-02,  1.6356E-02 ] # 0007
+ -  [  5.0748E-02,  1.5478E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  121
+ Gradient Norm: {Value:  4.15309E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  3.1485E-03 ] # 0006
+ -  [  4.956E-02,  1.6058E-02 ] # 0007
+ -  [  5.0721E-02,  1.1632E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  122
+ Gradient Norm: {Value:  4.45882E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4005E-03 ] # 0006
+ -  [  4.956E-02,  1.6081E-02 ] # 0007
+ -  [  5.0695E-02,  1.2506E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  123
+ Gradient Norm: {Value:  3.98390E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.9021E-03 ] # 0006
+ -  [  4.9559E-02,  1.4677E-02 ] # 0007
+ -  [  5.0669E-02,  1.1168E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  124
+ Gradient Norm: {Value:  4.86488E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.2696E-03 ] # 0006
+ -  [  4.9559E-02,  1.4439E-02 ] # 0007
+ -  [  5.0644E-02,  1.3682E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  125
+ Gradient Norm: {Value:  3.88892E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.6919E-03 ] # 0006
+ -  [  4.9558E-02,  1.3684E-02 ] # 0007
+ -  [  5.0619E-02,  1.0911E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  126
+ Gradient Norm: {Value:  4.43759E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0917E-03 ] # 0006
+ -  [  4.9558E-02,  1.3413E-02 ] # 0007
+ -  [  5.0594E-02,  1.2478E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  127
+ Gradient Norm: {Value:  4.23171E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5317E-03 ] # 0006
+ -  [  4.9558E-02,  1.2652E-02 ] # 0007
+ -  [  5.0571E-02,  1.1899E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  128
+ Gradient Norm: {Value:  4.30287E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.9629E-03 ] # 0006
+ -  [  4.9557E-02,  1.2942E-02 ] # 0007
+ -  [  5.0546E-02,  1.2100E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  129
+ Gradient Norm: {Value:  5.00852E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4128E-03 ] # 0006
+ -  [  4.9557E-02,  1.1699E-02 ] # 0007
+ -  [  5.0522E-02,  1.4116E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  130
+ Gradient Norm: {Value:  4.02654E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.8451E-03 ] # 0006
+ -  [  4.9557E-02,  1.1502E-02 ] # 0007
+ -  [  5.0499E-02,  1.1329E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  131
+ Gradient Norm: {Value:  4.16517E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.2451E-03 ] # 0006
+ -  [  4.9557E-02,  1.0342E-02 ] # 0007
+ -  [  5.0477E-02,  1.1733E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  132
+ Gradient Norm: {Value:  3.64731E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7822E-03 ] # 0006
+ -  [  4.9556E-02,  1.1390E-02 ] # 0007
+ -  [  5.0455E-02,  1.0252E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  133
+ Gradient Norm: {Value:  4.13475E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1165E-03 ] # 0006
+ -  [  4.9556E-02,  9.7790E-03 ] # 0007
+ -  [  5.0433E-02,  1.1652E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  134
+ Gradient Norm: {Value:  4.14276E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7475E-03 ] # 0006
+ -  [  4.9556E-02,  1.0580E-02 ] # 0007
+ -  [  5.0412E-02,  1.1668E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  135
+ Gradient Norm: {Value:  4.07563E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1106E-03 ] # 0006
+ -  [  4.9556E-02,  8.8970E-03 ] # 0007
+ -  [  5.0391E-02,  1.1491E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  136
+ Gradient Norm: {Value:  4.09078E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7075E-03 ] # 0006
+ -  [  4.9556E-02,  1.0203E-02 ] # 0007
+ -  [  5.0371E-02,  1.1524E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  137
+ Gradient Norm: {Value:  3.96589E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0817E-03 ] # 0006
+ -  [  4.9556E-02,  8.1399E-03 ] # 0007
+ -  [  5.0351E-02,  1.1186E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  138
+ Gradient Norm: {Value:  3.98813E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7201E-03 ] # 0006
+ -  [  4.9555E-02,  9.5177E-03 ] # 0007
+ -  [  5.0331E-02,  1.1239E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  139
+ Gradient Norm: {Value:  3.68867E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0213E-03 ] # 0006
+ -  [  4.9555E-02,  7.1734E-03 ] # 0007
+ -  [  5.0312E-02,  1.0406E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  140
+ Gradient Norm: {Value:  3.67680E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7120E-03 ] # 0006
+ -  [  4.9555E-02,  8.3693E-03 ] # 0007
+ -  [  5.0293E-02,  1.0364E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  141
+ Gradient Norm: {Value:  3.56885E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1046E-03 ] # 0006
+ -  [  4.9555E-02,  6.6783E-03 ] # 0007
+ -  [  5.0275E-02,  1.0070E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  142
+ Gradient Norm: {Value:  3.81232E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7346E-03 ] # 0006
+ -  [  4.9555E-02,  7.5883E-03 ] # 0007
+ -  [  5.0256E-02,  1.0755E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  143
+ Gradient Norm: {Value:  3.43518E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0810E-03 ] # 0006
+ -  [  4.9555E-02,  6.1869E-03 ] # 0007
+ -  [  5.0239E-02,  9.6942E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  144
+ Gradient Norm: {Value:  3.50474E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.8565E-03 ] # 0006
+ -  [  4.9555E-02,  7.0244E-03 ] # 0007
+ -  [  5.0221E-02,  9.8862E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  145
+ Gradient Norm: {Value:  3.36278E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.2547E-03 ] # 0006
+ -  [  4.9555E-02,  5.6149E-03 ] # 0007
+ -  [  5.0205E-02,  9.4921E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  146
+ Gradient Norm: {Value:  3.80830E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0690E-03 ] # 0006
+ -  [  4.9555E-02,  6.8793E-03 ] # 0007
+ -  [  5.0188E-02,  1.0748E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  147
+ Gradient Norm: {Value:  3.22316E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.3416E-03 ] # 0006
+ -  [  4.9555E-02,  4.9704E-03 ] # 0007
+ -  [  5.0171E-02,  9.0999E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  148
+ Gradient Norm: {Value:  4.06258E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.2029E-03 ] # 0006
+ -  [  4.9555E-02,  5.9123E-03 ] # 0007
+ -  [  5.0155E-02,  1.1473E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  149
+ Gradient Norm: {Value:  3.23041E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5625E-03 ] # 0006
+ -  [  4.9555E-02,  4.7771E-03 ] # 0007
+ -  [  5.014E-02,  9.1209E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  150
+ Gradient Norm: {Value:  3.70992E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.3682E-03 ] # 0006
+ -  [  4.9555E-02,  5.1674E-03 ] # 0007
+ -  [  5.0124E-02,  1.0478E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  151
+ Gradient Norm: {Value:  3.10474E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5436E-03 ] # 0006
+ -  [  4.9555E-02,  4.2481E-03 ] # 0007
+ -  [  5.0109E-02,  8.7676E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  152
+ Gradient Norm: {Value:  3.87496E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4600E-03 ] # 0006
+ -  [  4.9554E-02,  4.3887E-03 ] # 0007
+ -  [  5.0095E-02,  1.0948E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  153
+ Gradient Norm: {Value:  3.09294E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  3.0265E-03 ] # 0006
+ -  [  4.9554E-02,  3.8991E-03 ] # 0007
+ -  [  5.008E-02,  8.7342E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  154
+ Gradient Norm: {Value:  3.62784E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5200E-03 ] # 0006
+ -  [  4.9554E-02,  3.7375E-03 ] # 0007
+ -  [  5.0066E-02,  1.0251E-01 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  155
+ Gradient Norm: {Value:  3.07863E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.8600E-03 ] # 0006
+ -  [  4.9554E-02,  3.5396E-03 ] # 0007
+ -  [  5.0052E-02,  8.6958E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  156
+ Gradient Norm: {Value:  3.27366E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.6276E-03 ] # 0006
+ -  [  4.9554E-02,  3.3204E-03 ] # 0007
+ -  [  5.0038E-02,  9.2496E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  157
+ Gradient Norm: {Value:  3.10973E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.8125E-03 ] # 0006
+ -  [  4.9554E-02,  2.9979E-03 ] # 0007
+ -  [  5.0025E-02,  8.7860E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  158
+ Gradient Norm: {Value:  3.15334E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4879E-03 ] # 0006
+ -  [  4.9554E-02,  2.6699E-03 ] # 0007
+ -  [  5.0012E-02,  8.9115E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  159
+ Gradient Norm: {Value:  2.93645E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.7527E-03 ] # 0006
+ -  [  4.9554E-02,  2.6058E-03 ] # 0007
+ -  [  4.9999E-02,  8.2969E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  160
+ Gradient Norm: {Value:  3.35173E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5754E-03 ] # 0006
+ -  [  4.9554E-02,  2.5071E-03 ] # 0007
+ -  [  4.9987E-02,  9.4733E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  161
+ Gradient Norm: {Value:  2.68272E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.6142E-03 ] # 0006
+ -  [  4.9554E-02,  2.1373E-03 ] # 0007
+ -  [  4.9975E-02,  7.5804E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  162
+ Gradient Norm: {Value:  3.35649E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.5012E-03 ] # 0006
+ -  [  4.9554E-02,  2.1219E-03 ] # 0007
+ -  [  4.9963E-02,  9.4879E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  163
+ Gradient Norm: {Value:  2.63476E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4386E-03 ] # 0006
+ -  [  4.9554E-02,  1.8353E-03 ] # 0007
+ -  [  4.9951E-02,  7.4460E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  164
+ Gradient Norm: {Value:  3.25984E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.4335E-03 ] # 0006
+ -  [  4.9554E-02,  1.8000E-03 ] # 0007
+ -  [  4.994E-02,  9.2152E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  165
+ Gradient Norm: {Value:  2.52131E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.3438E-03 ] # 0006
+ -  [  4.9554E-02,  1.6688E-03 ] # 0007
+ -  [  4.9929E-02,  7.1255E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  166
+ Gradient Norm: {Value:  3.45511E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1991E-03 ] # 0006
+ -  [  4.9554E-02,  1.5539E-03 ] # 0007
+ -  [  4.9918E-02,  9.7688E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  167
+ Gradient Norm: {Value:  2.42432E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.2112E-03 ] # 0006
+ -  [  4.9554E-02,  1.5221E-03 ] # 0007
+ -  [  4.9908E-02,  6.8517E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  168
+ Gradient Norm: {Value:  3.01551E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1023E-03 ] # 0006
+ -  [  4.9554E-02,  1.4051E-03 ] # 0007
+ -  [  4.9898E-02,  8.5254E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  169
+ Gradient Norm: {Value:  2.42876E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1365E-03 ] # 0006
+ -  [  4.9554E-02,  1.3804E-03 ] # 0007
+ -  [  4.9888E-02,  6.8648E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  170
+ Gradient Norm: {Value:  3.02966E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0695E-03 ] # 0006
+ -  [  4.9554E-02,  1.2998E-03 ] # 0007
+ -  [  4.9878E-02,  8.5657E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  171
+ Gradient Norm: {Value:  2.42372E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1208E-03 ] # 0006
+ -  [  4.9554E-02,  1.3000E-03 ] # 0007
+ -  [  4.9869E-02,  6.8508E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  172
+ Gradient Norm: {Value:  2.88343E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.8979E-03 ] # 0006
+ -  [  4.9554E-02,  1.1372E-03 ] # 0007
+ -  [  4.986E-02,  8.1526E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  173
+ Gradient Norm: {Value:  2.25656E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.0566E-03 ] # 0006
+ -  [  4.9554E-02,  1.2258E-03 ] # 0007
+ -  [  4.985E-02,  6.3780E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  174
+ Gradient Norm: {Value:  2.80002E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.8168E-03 ] # 0006
+ -  [  4.9554E-02,  1.0417E-03 ] # 0007
+ -  [  4.9841E-02,  7.9169E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  175
+ Gradient Norm: {Value:  2.53112E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  2.1862E-03 ] # 0006
+ -  [  4.9554E-02,  1.2222E-03 ] # 0007
+ -  [  4.9833E-02,  7.1547E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  176
+ Gradient Norm: {Value:  2.62484E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.7097E-03 ] # 0006
+ -  [  4.9554E-02,  9.5384E-04 ] # 0007
+ -  [  4.9825E-02,  7.4216E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  177
+ Gradient Norm: {Value:  2.13105E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.6906E-03 ] # 0006
+ -  [  4.9554E-02,  9.7313E-04 ] # 0007
+ -  [  4.9817E-02,  6.0244E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  178
+ Gradient Norm: {Value:  2.35946E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.4433E-03 ] # 0006
+ -  [  4.9554E-02,  7.7468E-04 ] # 0007
+ -  [  4.9809E-02,  6.6715E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  179
+ Gradient Norm: {Value:  2.18443E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.5682E-03 ] # 0006
+ -  [  4.9554E-02,  8.6606E-04 ] # 0007
+ -  [  4.9802E-02,  6.1759E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  180
+ Gradient Norm: {Value:  2.22107E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.2680E-03 ] # 0006
+ -  [  4.9554E-02,  6.8006E-04 ] # 0007
+ -  [  4.9794E-02,  6.2805E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  181
+ Gradient Norm: {Value:  2.17526E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.3795E-03 ] # 0006
+ -  [  4.9554E-02,  7.2872E-04 ] # 0007
+ -  [  4.9787E-02,  6.1506E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  182
+ Gradient Norm: {Value:  2.27301E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.2109E-03 ] # 0006
+ -  [  4.9554E-02,  6.6451E-04 ] # 0007
+ -  [  4.9781E-02,  6.4276E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  183
+ Gradient Norm: {Value:  2.10978E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.3089E-03 ] # 0006
+ -  [  4.9554E-02,  6.8920E-04 ] # 0007
+ -  [  4.9774E-02,  5.9655E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  184
+ Gradient Norm: {Value:  2.45584E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.0988E-03 ] # 0006
+ -  [  4.9554E-02,  5.8877E-04 ] # 0007
+ -  [  4.9768E-02,  6.9450E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  185
+ Gradient Norm: {Value:  1.99442E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.2231E-03 ] # 0006
+ -  [  4.9554E-02,  6.3959E-04 ] # 0007
+ -  [  4.9761E-02,  5.6394E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  186
+ Gradient Norm: {Value:  2.22713E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.0158E-03 ] # 0006
+ -  [  4.9554E-02,  5.4009E-04 ] # 0007
+ -  [  4.9755E-02,  6.2982E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  187
+ Gradient Norm: {Value:  1.91182E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.2442E-03 ] # 0006
+ -  [  4.9554E-02,  6.3033E-04 ] # 0007
+ -  [  4.9749E-02,  5.4056E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  188
+ Gradient Norm: {Value:  2.22099E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  9.3000E-04 ] # 0006
+ -  [  4.9554E-02,  4.9450E-04 ] # 0007
+ -  [  4.9744E-02,  6.2810E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  189
+ Gradient Norm: {Value:  1.85082E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.1312E-03 ] # 0006
+ -  [  4.9554E-02,  5.5770E-04 ] # 0007
+ -  [  4.9738E-02,  5.2334E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  190
+ Gradient Norm: {Value:  1.99280E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  8.3329E-04 ] # 0006
+ -  [  4.9554E-02,  4.4638E-04 ] # 0007
+ -  [  4.9733E-02,  5.6357E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  191
+ Gradient Norm: {Value:  1.77908E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  1.0713E-03 ] # 0006
+ -  [  4.9554E-02,  5.2695E-04 ] # 0007
+ -  [  4.9728E-02,  5.0306E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  192
+ Gradient Norm: {Value:  2.06089E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  7.7556E-04 ] # 0006
+ -  [  4.9554E-02,  4.0924E-04 ] # 0007
+ -  [  4.9723E-02,  5.8284E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  193
+ Gradient Norm: {Value:  1.76163E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  9.2985E-04 ] # 0006
+ -  [  4.9554E-02,  4.6885E-04 ] # 0007
+ -  [  4.9718E-02,  4.9815E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  194
+ Gradient Norm: {Value:  2.09240E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  7.2229E-04 ] # 0006
+ -  [  4.9554E-02,  3.8031E-04 ] # 0007
+ -  [  4.9713E-02,  5.9176E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  195
+ Gradient Norm: {Value:  1.69273E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  8.5373E-04 ] # 0006
+ -  [  4.9554E-02,  4.1946E-04 ] # 0007
+ -  [  4.9708E-02,  4.7868E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  196
+ Gradient Norm: {Value:  1.93156E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  6.7162E-04 ] # 0006
+ -  [  4.9554E-02,  3.5881E-04 ] # 0007
+ -  [  4.9704E-02,  5.4627E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  197
+ Gradient Norm: {Value:  1.60438E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  7.9883E-04 ] # 0006
+ -  [  4.9554E-02,  3.7466E-04 ] # 0007
+ -  [  4.9699E-02,  4.5370E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  198
+ Gradient Norm: {Value:  1.93593E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  6.2164E-04 ] # 0006
+ -  [  4.9554E-02,  3.5902E-04 ] # 0007
+ -  [  4.9695E-02,  5.4752E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  199
+ Gradient Norm: {Value:  1.59627E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  7.7066E-04 ] # 0006
+ -  [  4.9554E-02,  3.3753E-04 ] # 0007
+ -  [  4.9691E-02,  4.5142E-02 ] # 0008
+  #-----------------------------------------------------------------------------  iter=  200
+ Gradient Norm: {Value:  1.88402E-03, Exit criterion:  1.00E-05}
+ Eigenvalues and eigenstate residue:
+ -  [ -1.6745E-03,  2.4519E-05 ] # 0001
+ -  [ -1.6727E-03,  3.8100E-05 ] # 0002
+ -  [ -1.6726E-03,  2.9178E-05 ] # 0003
+ -  [ -1.6716E-03,  3.2272E-05 ] # 0004
+ -  [ -1.6707E-03,  3.7446E-05 ] # 0005
+ -  [  4.9554E-02,  5.8107E-04 ] # 0006
+ -  [  4.9554E-02,  3.2950E-04 ] # 0007
+ -  [  4.9687E-02,  5.3284E-02 ] # 0008
+  #WARNING: No convergence within the allowed number of minimization steps
+ Complete list of energy eigenvalues:
+    #Kpt #0001  BZ coord. =  [  0.000000,  0.000000,  0.000000 ]
+ - e_occ                               : -3.85589572607116E-01 # 0001
+ - e_occ                               : -2.93411963540854E-01 # 0002
+ - e_occ                               : -2.93410208496714E-01 # 0003
+ - e_occ                               : -2.93409503914428E-01 # 0004
+ - e_occ                               : -1.85006679108091E-01 # 0005
+ - e_occ                               : -1.85005129682235E-01 # 0006
+ - e_occ                               : -1.85004625646925E-01 # 0007
+ - e_occ                               : -1.85002825827034E-01 # 0008
+ - e_occ                               : -1.85002507558976E-01 # 0009
+ - e_occ                               : -1.54705661428720E-01 # 0010
+ - e_occ                               : -8.16545787764788E-02 # 0011
+ - e_occ                               : -8.16538056613041E-02 # 0012
+ - e_occ                               : -8.16534309007460E-02 # 0013
+ - e_occ                               : -7.32333591916295E-02 # 0014
+ - e_occ                               : -7.32323382096736E-02 # 0015
+ - e_occ                               : -7.32318995238204E-02 # 0016
+ - e_occ                               : -7.10832326672140E-02 # 0017
+ - e_occ                               : -7.10813671018054E-02 # 0018
+ - e_occ                               : -7.10812453235639E-02 # 0019
+ - e_occ                               : -7.10803941007982E-02 # 0020
+ - HOMO LUMO gap (AU, eV)              :  [  6.9405890071758E-02,  1.88863039948058E+00 ]
+ - e_vrt                               : -1.67450402904024E-03 # 0001
+ - e_vrt                               : -1.67274546302884E-03 # 0002
+ - e_vrt                               : -1.67257329942157E-03 # 0003
+ - e_vrt                               : -1.67160511458292E-03 # 0004
+ - e_vrt                               : -1.67074063009400E-03 # 0005
+ - e_vrt                               :  4.95537635548287E-02 # 0006
+ - e_vrt                               :  4.95542671417679E-02 # 0007
+ - e_vrt                               :  4.96868825871823E-02 # 0008
+  #-------------------------------- Warnings obtained during the run, check their relevance!
+ WARNINGS:
+ - A bigger number of virtual orbitals may be needed for better convergence
+ - No convergence within the allowed number of minimization steps
+  #-------------------------------------------------------------------- Timing for root process
+ Timings for root process:
+   CPU time (s)                        :  427.34
+   Elapsed time (s)                    :  171.83
+ BigDFT infocode                       :  0
+ Average noise forces: {x:  4.89636353E-07, y:  2.09381139E-07, z:  1.56456832E-06, 
+                    total:  1.65271239E-06}
+ Clean forces norm (Ha/Bohr): {maxval:  1.341251696877E-04, fnrm2:  8.972245161928E-08}
+ Raw forces norm (Ha/Bohr): {maxval:  1.319843174517E-04, fnrm2:  9.313614932886E-08}
+  #-------------------------------------------------------------------- Atomic Forces (Ha/Bohr)
+ Atomic Forces (Ha/Bohr):
+ -  {Al: [ 8.157123517805E-05, -6.289687708122E-05, -3.046205906265E-05]} # 0001
+ -  {Al: [ 2.248354810004E-06,  1.616372507332E-06,  8.143901627713E-06]} # 0002
+ -  {Al: [ 2.477857976222E-05,  6.999125420056E-05,  1.659825369463E-05]} # 0003
+ -  {Al: [ 4.617434276112E-05,  7.846609304588E-05, -9.781442187938E-05]} # 0004
+ -  {Al: [-8.271374540876E-05,  6.185714432891E-05,  2.902103482653E-05]} # 0005
+ -  {Al: [-2.643878034770E-05, -7.054390259534E-05, -1.970893527231E-05]} # 0006
+ -  {Al: [ 1.041173198674E-06,  8.411229275471E-05,  6.763726160888E-07]} # 0007
+ -  {Al: [-4.587100981412E-05, -7.828009478901E-05,  9.878075906883E-05]} # 0008
+ -  {Al: [-1.226742067679E-05,  7.727320238321E-06,  1.244034925892E-05]} # 0009
+ -  {Al: [ 1.370219458980E-05, -9.324896438809E-06, -1.429325782955E-05]} # 0010
+ -  {Al: [-2.602718096786E-05,  3.307770110810E-05, -1.502505660851E-05]} # 0011
+ -  {Al: [ 2.649622500922E-05, -3.117110847996E-05,  1.187601158069E-05]} # 0012
+ -  {Al: [-2.693968093875E-06, -8.463129879947E-05, -2.329520209913E-07]} # 0013
+ Energy (Hartree)                      : -6.33110954435966846E+01
+ Force Norm (Hartree/Bohr)             :  2.99537062179760366E-04
+ Memory Consumption Report:
+   Tot. No. of Allocations             :  40901
+   Tot. No. of Deallocations           :  40900
+   Remaining Memory (B)                :  32
+   Memory occupation:
+     Peak Value (MB)                   :  344.323
+     for the array                     : w%x_f3
+     in the routine                    : null
+     Memory Peak of process            : 385.772 MB
+ Walltime since initialization         :  00:02:52.019213357
+ Max No. of dictionaries used          :  5061 #( 1156 still in use)
+ Number of dictionary folders allocated:  1

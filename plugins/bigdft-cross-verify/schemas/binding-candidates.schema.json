@@ -1,0 +1,77 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "binding-candidates",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/binding-candidates/1"
+  },
+  "needs": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "kind": {
+       "enum": [
+        "mcp_tool",
+        "paper_table",
+        "authority",
+        "user_file"
+       ]
+      },
+      "tool": {
+       "type": "string"
+      },
+      "arguments": {
+       "type": "object"
+      },
+      "extract": {
+       "type": "object",
+       "properties": {
+        "path": {
+         "type": "string"
+        },
+        "format": {
+         "enum": [
+          "scalar",
+          "atoms_list",
+          "xyz_text",
+          "artifact_xyz"
+         ]
+        },
+        "units": {
+         "type": "string"
+        },
+        "units_path": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "path",
+        "format"
+       ],
+       "additionalProperties": false
+      },
+      "file": {
+       "type": "string"
+      },
+      "rows": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "kind"
+     ],
+     "additionalProperties": false
+    }
+   }
+  }
+ },
+ "required": [
+  "schema",
+  "needs"
+ ],
+ "additionalProperties": false
+}

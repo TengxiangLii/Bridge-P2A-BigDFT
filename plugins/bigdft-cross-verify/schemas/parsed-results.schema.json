@@ -1,0 +1,80 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "parsed-results",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/parsed-results/1"
+  },
+  "runs": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "properties": {
+     "status": {
+      "enum": [
+       "ok",
+       "scf_not_converged",
+       "missing",
+       "failed"
+      ]
+     },
+     "log_sha256": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "energy_Ha": {
+      "type": [
+       "number",
+       "null"
+      ]
+     },
+     "infocode": {
+      "type": [
+       "integer",
+       "null"
+      ]
+     },
+     "nspin": {
+      "type": [
+       "integer",
+       "null"
+      ]
+     },
+     "occupied_Ha": {
+      "type": [
+       "array",
+       "null"
+      ]
+     },
+     "homo_Ha": {
+      "type": [
+       "number",
+       "null"
+      ]
+     },
+     "lumo_Ha": {
+      "type": [
+       "number",
+       "null"
+      ]
+     },
+     "detail": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "status",
+     "log_sha256",
+     "energy_Ha"
+    ]
+   }
+  }
+ },
+ "required": [
+  "schema",
+  "runs"
+ ]
+}

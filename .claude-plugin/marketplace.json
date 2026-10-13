@@ -1,0 +1,12 @@
+{
+  "name": "bridge-p2a-bigdft",
+  "owner": {"name": "TengxiangLii"},
+  "metadata": {"description": "Re-verify calculations of Paper2Agent papers with BigDFT"},
+  "plugins": [
+    {
+      "name": "bigdft-cross-verify",
+      "source": "./plugins/bigdft-cross-verify",
+      "description": "Registry profiles, probe-gated bindings to any P2A agent, deterministic BigDFT run plans, convergence rounds and verdicts (prototype: Fisicaro et al. 2023)"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+ "schema": "bridge/registry-index/1",
+ "entries": {
+  "10.1039/D2MA01088G": {
+   "dir": "10.1039_D2MA01088G",
+   "profile": {
+    "version": "2.0.0",
+    "status": "reviewed",
+    "sha256": "e871ed66be796cd2a1dabdf0ea8619c7683efc8a1d02847a18241cfcc79fba3b"
+   },
+   "bigdft_mapping": {
+    "version": "1.0.0",
+    "status": "draft",
+    "sha256": "2fd9ffe73c6eaccc0fadc476d027fb87be645e866aa41ae418013cc82a0ee4c5"
+   }
+  }
+ }
+}

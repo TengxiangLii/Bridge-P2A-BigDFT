@@ -1,0 +1,32 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "results",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/results/1"
+  },
+  "provenance": {
+   "type": "object"
+  },
+  "claims": {
+   "type": "array"
+  },
+  "diagnostics": {
+   "type": "array"
+  },
+  "labels": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  }
+ },
+ "required": [
+  "schema",
+  "provenance",
+  "claims",
+  "diagnostics",
+  "labels"
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "run-plan",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/run-plan/1"
+  },
+  "inputs": {
+   "type": "object"
+  },
+  "claims": {
+   "type": "array"
+  },
+  "runs": {
+   "type": "object"
+  },
+  "initial_batch": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "unplannable": {
+   "type": "array"
+  },
+  "comparable_with_reference": {
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "schema",
+  "inputs",
+  "claims",
+  "runs",
+  "initial_batch",
+  "unplannable",
+  "comparable_with_reference"
+ ],
+ "additionalProperties": false
+}

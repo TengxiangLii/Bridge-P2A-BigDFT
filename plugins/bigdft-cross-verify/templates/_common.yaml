@@ -1,0 +1,9 @@
+# Shared by every template's bigdft recipe unless the recipe overrides it.
+library_version: 0.1.0
+status: draft            # until a BigDFT expert reviews the library (design §13)
+convergence:
+  knob: hgrids           # bohr
+  ladders:
+    quick: [0.40]
+    standard: [0.45, 0.40, 0.35]
+    tight: [0.45, 0.40, 0.35, 0.30, 0.25]

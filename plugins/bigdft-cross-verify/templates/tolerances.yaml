@@ -1,0 +1,8 @@
+# Default tolerances per class and tier (carried over from bigdft-cross-verify v0.1.0).
+# A reviewed bigdft-mapping.json may override a class, with a reason.
+relative_energy: {same_code: 0.005, cross_code: 0.05, unit: eV}
+absolute_energy: {same_code: 0.001, cross_code: null, unit: Ha}   # diagnostic only
+orbital_gap: {same_code: 0.02, cross_code: 0.15, unit: eV}
+ionization_affinity: {same_code: 0.05, cross_code: 0.15, unit: eV}
+bond_length: {same_code: 0.01, cross_code: 0.03, unit: Angstrom}
+categorical: {same_code: null, cross_code: null, unit: null}

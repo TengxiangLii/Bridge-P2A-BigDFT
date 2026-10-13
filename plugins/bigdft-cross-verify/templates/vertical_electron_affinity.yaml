@@ -1,0 +1,16 @@
+id: vertical_electron_affinity
+version: 1
+status: draft
+quantity: "energy released by adding one electron at fixed geometry"
+definition: "VEA = E(N) - E(N+1), both at the N-electron geometry (frozen)"
+kind: energy_linear
+parameters: {species: {type: structure_ref, required: true}}
+units: eV
+tolerance_class: ionization_affinity
+synonyms: ["vertical electron affinity", "VEA", "vertical EA"]
+not_equivalent_to: ["-epsilon_LUMO", "adiabatic electron affinity"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}, "N+1": {charge_offset: -1, virtual: false}}
+    combine: {N: 1.0, "N+1": -1.0}
+    stop_abs: 0.005

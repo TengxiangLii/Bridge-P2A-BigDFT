@@ -1,0 +1,77 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "params",
+ "type": "object",
+ "properties": {
+  "schema": {
+   "const": "bridge/params/1"
+  },
+  "claims": {
+   "oneOf": [
+    {
+     "const": "default"
+    },
+    {
+     "const": "all"
+    },
+    {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "minItems": 1
+    }
+   ]
+  },
+  "preset": {
+   "enum": [
+    "quick",
+    "standard",
+    "tight"
+   ]
+  },
+  "species": {
+   "type": [
+    "array",
+    "null"
+   ],
+   "items": {
+    "type": "string"
+   }
+  },
+  "overrides": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "key": {
+      "enum": [
+       "ladder",
+       "rmult",
+       "gnrm_cv"
+      ]
+     },
+     "value": {},
+     "reason": {
+      "type": "string",
+      "minLength": 3
+     }
+    },
+    "required": [
+     "key",
+     "value",
+     "reason"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "schema",
+  "claims",
+  "preset",
+  "species",
+  "overrides"
+ ],
+ "additionalProperties": false
+}

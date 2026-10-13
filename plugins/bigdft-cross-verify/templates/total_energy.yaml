@@ -1,0 +1,17 @@
+id: total_energy
+version: 1
+status: draft
+quantity: "Kohn-Sham total energy of one structure"
+definition: "E_KS(N) at the given geometry"
+diagnostic: true        # reported without a verdict: depends on pseudopotential file and grid
+kind: energy_linear
+parameters: {species: {type: structure_ref, required: true}}
+units: Ha
+tolerance_class: absolute_energy
+synonyms: ["total energy", "KS energy", "Kohn-Sham energy", "final energy"]
+not_equivalent_to: ["binding energy", "cohesive energy", "energy per atom"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}}
+    combine: {N: 1.0}
+    stop_abs: 0.0005     # Ha between consecutive ladder steps

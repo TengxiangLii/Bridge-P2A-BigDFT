@@ -1,0 +1,15 @@
+id: relative_energy_ordering
+version: 1
+status: draft
+quantity: "energies of isomers relative to the first one, and their order"
+definition: "dE_k = E_KS(isomer k) - E_KS(isomer 0), all single points at the given geometries"
+kind: energy_ordering
+parameters: {isomers: {type: structure_ref_list, required: true, min_items: 2}}
+units: eV
+tolerance_class: relative_energy
+synonyms: ["energy above the global minimum", "isomer ordering", "relative energy", "E_KS - E_KS^0"]
+not_equivalent_to: ["free energy ordering", "zero-point corrected ordering"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}}   # one per isomer
+    stop_abs: 0.001      # eV, max change of any dE_k

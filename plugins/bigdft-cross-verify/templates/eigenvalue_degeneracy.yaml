@@ -1,0 +1,18 @@
+id: eigenvalue_degeneracy
+version: 1
+status: draft
+quantity: "degeneracy pattern of the occupied Kohn-Sham levels"
+definition: "sort occupied eigenvalues; consecutive levels closer than threshold_Ha form one group; the ordered list of group sizes"
+kind: degeneracy
+parameters:
+  species: {type: structure_ref, required: true}
+  threshold_Ha: {type: number, required: true}
+requires: {closed_shell: true}
+units: pattern
+tolerance_class: categorical
+synonyms: ["KS DFT degeneracies", "eigenvalue degeneracy", "shell structure", "degenerate levels"]
+not_equivalent_to: ["point group degeneracies (symmetry-allowed)"]
+engine_recipes:
+  bigdft:
+    runs: {N: {charge_offset: 0, virtual: false}}
+    stop_rule: unchanged_pattern
